@@ -109,6 +109,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+# MEDIA_URL='clima/media/'
+# MEDIA_ROOT=BASE_DIR/'clima/media'
+
 STATIC_URL = 'static/'
 STATIC_ROOT=BASE_DIR/"static" #collectstatic
 

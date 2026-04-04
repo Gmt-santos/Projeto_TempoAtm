@@ -1,3 +1,64 @@
-body{
-    background-color: blue;
+:root{
+    --primary-color-lightblue:#39E6E3;
+    --primary-color-green:#39E66D;
+    --primary-color-blue:#397BE6;
+    --secondary-color-rain:#184B66;
+    --secondary-color-lightgreen:#39E6A9;
+    --secondary-color-lightblue:#87E6E4;
+}
+@font-face {
+    font-family:Font-logo;
+    src: url("../fonts/ArchivoBlack-Regular.ttf");
+}
+
+.lucida{
+    font-family: 'Lucida Sans';
+}
+.header{
+   /* Faz o header colar no teto da página */
+   position:fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-direction:row;
+    height:100px;
+    background-color: var(--primary-color-blue);
+    border-radius:0px 0px 15px 15px
+}
+.logo_min{
+    width:80px;
+    height:80px;
+    margin: 20px;
+}
+.logo_max{
+
+}
+.logo_nome_div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0em;
+}
+
+.logo_p{
+    color: white;
+    text-decoration: none;
+    font-size: 40px;
+   font-weight:bold;
+   transition: font-size 1s;
+   cursor:pointer;
+}
+.logo_p:hover{
+    font-size: 42px;
+    transition: font-size 1s;
+    cursor:pointer;
+}
+.footer{
+    background-color:var(--primary-color-blue);
+    height: 100px;
+    width:100%;
+    margin-top: 50px;
+    bottom:0;
 }
