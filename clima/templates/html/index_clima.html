@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style_index.css' %}">
+    
     <title>Index</title>
 </head>
 <body>
@@ -27,21 +28,29 @@
     <div class="container">
 
         <div class="imagem_header_div">
+          
+                <img style="display: flex;"class="imagem_header_img"src="{% static 'media/images/imagem_dual.png'%}" alt="">
+                <p class="lucida imagem_header_p">O clima não muda,<br>as condições atmosféricas, sim!<br>E os seus planos?</p>
            
-            <img class="imagem_header_img"src="{% static 'media/images/imagem_dual.png'%}" alt="">
+            
+            
 
         </div>
 
         <div class="acontecimentos_div ">
-            
-            <p class="acontecimentos_p lucida">Quer marcar um passeio,mas não sabe como estará o tempo?</p>
+           
+                <p class="acontecimentos_p lucida">Quer marcar um passeio,mas não sabe como estará o tempo?</p>
 
-            <div class="acontecimentos_imagem_div">
+             <div class="acontecimentos_imagem_div">
                 <img class="acontecimentos_imagem_img" src="{% static 'media/images/homem_triste.png' %}" alt="">
                 <img class="acontecimentos_imagem_img" src="{% static 'media/images/familia_triste.png' %}" alt="">
             </div>
 
+       
+            
+
         </div>
+      
 
          <div class="propaganda_div ">
             
@@ -65,17 +74,62 @@
 
         </div>
 
-        <div class="acontecimentos_div">
+        <div style="background-color: #ffffff00;"class="acontecimentos_div">
+
             <div class="distribuir_informacoes_finais_div">
-                <div class="informacoes_finais_card_div">
-                    <p class="informacoes_finais_p lucida">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dignissim sapien in nisl volutpat tempus. Ut fringilla nisi eget fermentum viverra. Suspendisse ornare, mauris in pretium rhoncus, arcu erat auctor massa, in rhoncus dui purus vel orci. Curabitur et scelerisque enim. Donec volutpat, diam ac gravida viverra, sapien turpis accumsan ipsum, nec condimentum nisl diam sed nibh. Maecenas lacinia lectus eget risus luctus, ac dignissim odio egestas. Aenean maximus feugiat ligula, sit amet sodales ligula posuere vel. Quisque porta, massa sed lacinia tristique, ligula sem condimentum diam, ac imperdiet augue massa sed purus. Proin vel ipsum quam. Curabitur non facilisis turpis. Praesent mattis sem ultrices urna dapibus, quis ultricies purus scelerisque. Suspendisse a felis sollicitudin, tempus mi vel, faucibus mauris.
 
-Morbi in justo at neque elementum mollis. Cras neque quam, elementum ac nisi vel, malesuada consequat nulla. Cras lorem metus, commodo at mauris at, pharetra pretium enim. Duis eget purus at lectus pharetra consectetur. Ut porta varius justo. Sed rutrum ultricies purus, quis ultricies magna vestibulum quis. Vivamus id tellus massa. Suspendisse consequat tellus ultrices neque mollis, a hendrerit arcu finibus. Mauris et mauris dui. Mauris tristique lectus in urna lacinia fermentum. Nam venenatis efficitur quam, in ornare ligula tincidunt quis. Integer auctor felis consequat velit porta elementum. In aliquam, elit ut eleifend maximus, dolor felis pretium diam, nec molestie est turpis quis lacus. Integer vitae odio eget augue ullamcorper pharetra. Donec turpis neque, tristique vitae rhoncus vel, feugiat sed tellus.
+                <div style="display:flex; flex-direction:column;align-items: flex-start;justify-content: start;gap:40px"class="informacoes_finais_card_div">
+                    <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
 
-Vestibulum dictum id risus sit amet tempor. Phasellus in nisl consectetur, iaculis leo eget, venenatis massa. Morbi viverra sed lectus sit amet sagittis. Aenean eget leo a mauris dictum suscipit. Nunc egestas tellus id mauris aliquet, et ullamcorper elit mattis. Nullam quis metus eu velit dignissim finibus at ornare velit. Ut aliquam nisl vel aliquam laoreet. Lorem ipsum dolor.</p>
+                        <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
+
+                        <p class="informacoes_finais_p lucida">
+                            Informações adicionais
+                         </p>
+                         
+
+
+                    </div>
+                   
+                    <div style="display: flex;flex-direction: row; align-items: center;gap:10px">
+
+                        <div class="icon_circle_div">
+
+                            <img class="icon_calendar_img" src="{% static 'media/icons/calendario_icon.png'%}" alt="">
+
+                        </div>
+                         <p class="informacoes_finais_desc_p lucida">
+                            Informações adicionaisaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                         </p>
+                        
+                    </div>
+
+                    <div style="display: flex;flex-direction: row; align-items: center;gap:10px">
+
+                         <div class="icon_circle_div">
+
+                            <img class="icon_calendar_img" src="{% static 'media/icons/calendario_icon.png'%}" alt="">
+
+                        </div>
+
+                    </div>
+                    
+                    <div style="display: flex;flex-direction: row;">
+
+                         <div class="icon_circle_div">
+
+                            <img class="icon_calendar_img" src="{% static 'media/icons/calendario_icon.png'%}" alt="">
+
+                        </div>
+
+                    </div>
+
+                    
                 </div>
 
+
                  <div style="background-color: white;"class="informacoes_finais_card_div">
+
                     <div style="display:flex;flex-direction:row;align-items: center;">
                          <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
                          <a href="{% url 'clima:index' %}"class="logo_p lucida" style="color:black;" >MatWeather</a>
@@ -86,7 +140,7 @@ Vestibulum dictum id risus sit amet tempor. Phasellus in nisl consectetur, iacul
                         <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
                         <button  style="width:100%;" class="botoes_header_buttons lucida">REGISTRE-SE</button>
                     
-                </div>  
+                 </div>  
                 
 
 
