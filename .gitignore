@@ -77,6 +77,7 @@ wheels/
 pip-log.txt 
 pip-delete-this-directory.txt 
 
+
 # Unit test / coverage reports 
 htmlcov/ 
 .tox/ 
@@ -108,7 +109,8 @@ env/
 venv/ 
 ENV/ 
 env.bak/ 
-venv.bak/ 
+venv.bak/
+
 
 # mkdocs documentation 
 /site 
@@ -141,3 +143,5 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 
+#coisa minha
+db_example.txt

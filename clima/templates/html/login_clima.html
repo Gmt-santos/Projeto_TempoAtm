@@ -29,17 +29,21 @@
 
     <div class="container">
 
-        <div>
-
             <form class="form_login_form" action="{% url 'clima:login_enter'%}" method="POST">
+
                  {% csrf_token %}
+
                 <div class="info_login_div">
+
                     <p class="lucida header_form_p ">LOGIN</p>
+
                     <p>E-mail</p>
-                    <input type="email" name="e-mail" id="e-mail">
+                    <input placeholder="meuemail@gmail.com"class="email_input lucida"type="email" name="email" id="email">
+
                     <p>Senha</p>
-                    <input type="password" name="senha" id="senha">
-                    <input type="submit" value="Enviar">
+                    <input  placeholder="Senha"class="password_input"type="password" name="senha" id="senha">
+
+                    <input class="submit_input" type="submit" value="Enviar">
 
 
                 </div>
@@ -47,28 +51,39 @@
 
 
             </form>
-        </div>
+       
 
 
     </div>
+
 </body>
 
 
 <footer>
         <div class="footer">
-             <div class="logo_nome_div">
+            <div class="logo_nome_div">
+
                 <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
                  <p class="logo_footer_p lucida" >MatWeather</p>
+
             </div>
-            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">Projeto educacional realizado por Gmt-santos</a>
+
+            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">
+                Projeto educacional realizado por Gmt-santos</a>
+
             <p class ="footer_credit_p lucida">--Todos os direitos reservados 2026--</p>
+
             <div style="display:flex;flex-direction: row;gap: 10px;">
-                <a  class ="footer_credit_a lucida" target= "_blank" href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+
+                <a  class ="footer_credit_a lucida" target= "_blank" 
+                href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+
                 <a  class ="footer_credit_a lucida" target= "_blank" href="https://github.com/Gmt-santos">GitHub</a>
                 
                 
 
             </div>
+
         </div>
 
 </footer>
