@@ -1,7 +1,5 @@
 @import url("style_all.css");
- body{
-    background-image:url("../media/images/background.png")
-} 
+ 
 
 .container{
     display:flex;
@@ -16,29 +14,7 @@
     align-items: center;
     
 }
-.botoes_header_div{
-    width:fit-content;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap:30px;
-    padding:20px;
-}
-.botoes_header_buttons{
-    height:30px ;
-    width:200px;
-    border-radius: 20px;
-    border-width: 0px;
-    background-color:var(--primary-color-blue);
-    font-size:15px;
-    color:white;
-    transition: background-color 1s;
-}
-.botoes_header_buttons:hover{
-    transition: background-color 1s;
-    background-color: #70a0ec;
-    cursor:pointer;
-}
+
 .imagem_header_div{
      width: fit-content;
     max-height:100%;
@@ -62,7 +38,7 @@
     transition: filter 2s;
     max-width: 100%;
     max-height: 100%;
-      overflow-x: hidden; 
+    overflow: hidden;
     border-radius: 20px;
   
 }
@@ -88,16 +64,13 @@
      flex-direction: column;
      align-items: center;
      margin-top: 100px;
-     background-color: var(--secondary-color-rain);
+     /* background-color: var(--secondary-color-rain); */
      padding: 1px 0px 20px 0px;
-     border-radius: 20px;
-     transition: background-color 1s;
+     /* border-radius: 20px; */
+    
 
 }
-.acontecimentos_div:hover{
-    background-color:#266b91;
-     transition: background-color 1s;
-}
+
 
 .acontecimentos_imagem_div{
     overflow: hidden;
@@ -128,17 +101,13 @@
      flex-direction: column;
      align-items: center;
      margin-top: 100px;
-     background-color: var(--secondary-color-rain);
+     /* background-color: var(--secondary-color-rain); */
      padding: 1px 0px 20px 0px;
-     border-radius: 20px;
-     transition: background-color 1s;
+     /* border-radius: 20px; */
+    
 
 }
-.propaganda_div:hover{
-    background-color:#266b91;
-     transition: background-color 1s;
 
-}
 .propaganda_imagem_div{
     overflow: hidden;
      display: flex;
@@ -166,11 +135,22 @@
     overflow: hidden;
 
 }
+.informacoes_finais_card_div_2{
+    padding:10px;
+    background-color: var(--secondary-color-rain);
+    width:45%;
+    height:400px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+
+}
 .informacoes_finais_p{
     width: 100%;
    height: fit-content;
-   margin-bottom:10px;
-   font-size: 20px;
+   font-size: 25px;
    color:white;
 }
 .informacoes_finais_desc_p{
@@ -190,6 +170,7 @@
 .texto_auxiliar_botoes_p{
     font-size:15px;
     font-weight:bold;
+    color: white;
 
 }
 

@@ -8,7 +8,7 @@
     
     <title>Index</title>
 </head>
-<body>
+<body class="gradient">
     <div style="display: block; height: fit-content;" >
         <div class="header">
             <div class="logo_nome_div">
@@ -17,8 +17,9 @@
             </div>
 
             <div class="botoes_header_div">
-                <button class="botoes_header_buttons lucida">LOGIN</button>
-                <button class="botoes_header_buttons lucida">REGISTRE-SE</button>
+                <a href="{% url 'clima:login'%}"> <button class="botoes_header_buttons lucida">LOGIN</button></a>
+              
+               <a href=""><button class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
             </div>
             
         </div>
@@ -39,7 +40,7 @@
 
         <div class="acontecimentos_div ">
            
-                <p class="acontecimentos_p lucida">Quer marcar um passeio,mas não sabe como estará o tempo?</p>
+                <p class="acontecimentos_p lucida">Quer marcar um passeio, mas não sabe como estará o tempo?</p>
 
              <div class="acontecimentos_imagem_div">
                 <img class="acontecimentos_imagem_img" src="{% static 'media/images/homem_triste.png' %}" alt="">
@@ -78,7 +79,7 @@
 
             <div class="distribuir_informacoes_finais_div">
 
-                <div style="display:flex; flex-direction:column;align-items: flex-start;justify-content: start;gap:40px"class="informacoes_finais_card_div">
+                <div style="display:flex; flex-direction:column;align-items: flex-start;justify-content: start;gap:20px"class="informacoes_finais_card_div">
                     <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
 
                         <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
@@ -99,7 +100,7 @@
 
                         </div>
                          <p class="informacoes_finais_desc_p lucida">
-                            Informações adicionaisaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                            Planeje-se com um calendário altamente personalizável!!!
                          </p>
                         
                     </div>
@@ -108,19 +109,25 @@
 
                          <div class="icon_circle_div">
 
-                            <img class="icon_calendar_img" src="{% static 'media/icons/calendario_icon.png'%}" alt="">
+                            <img class="icon_calendar_img" src="{% static 'media/icons/nuvem_coberta_icon.png'%}" alt="">
 
                         </div>
+                          <p class="informacoes_finais_desc_p lucida">
+                           Tenha previsões do tempo conectadas ao seu calendário em até X dias!!!
+                         </p>
 
                     </div>
                     
-                    <div style="display: flex;flex-direction: row;">
+                    <div style="display: flex;flex-direction: row;align-items: center;gap:10px">
 
                          <div class="icon_circle_div">
 
-                            <img class="icon_calendar_img" src="{% static 'media/icons/calendario_icon.png'%}" alt="">
+                            <img class="icon_calendar_img" src="{% static 'media/icons/ampl_term_icon.png'%}" alt="">
 
                         </div>
+                          <p class="informacoes_finais_desc_p lucida">
+                            Receba a temperatura máxima e mínima do dia, velocidade do vento e muito mais!!!
+                         </p>
 
                     </div>
 
@@ -128,17 +135,17 @@
                 </div>
 
 
-                 <div style="background-color: white;"class="informacoes_finais_card_div">
+                 <div class="informacoes_finais_card_div_2">
 
                     <div style="display:flex;flex-direction:row;align-items: center;">
-                         <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
-                         <a href="{% url 'clima:index' %}"class="logo_p lucida" style="color:black;" >MatWeather</a>
+                         <img class="logo_max" src="{% static 'media/images/logo.png' %}" alt="">
+                         <p class="logo_p_max lucida" >MatWeather</p>
                     </div>
-                    
+                        
                         <p class="lucida texto_auxiliar_botoes_p">Faça o login caso já tenha conta</p>
-                        <button style="width:100%;"class="botoes_header_buttons lucida">LOGIN</button>
+                         <a style="width: 100%;" href="{% url 'clima:login'%}"> <button  style="width: 100%;" class="botoes_header_buttons lucida">LOGIN</button></a>
                         <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
-                        <button  style="width:100%;" class="botoes_header_buttons lucida">REGISTRE-SE</button>
+                         <a style="width: 100%;" href=""><button style="width: 100%;"class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
                     
                  </div>  
                 
@@ -164,7 +171,19 @@
     </div>
     <footer>
         <div class="footer">
-            <!-- FAZER FOOTER/CSS FOOTER -->
+             <div class="logo_nome_div">
+                <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+                 <p class="logo_footer_p lucida" >MatWeather</p>
+            </div>
+            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">Projeto educacional realizado por Gmt-santos</a>
+            <p class ="footer_credit_p lucida">--Todos os direitos reservados 2026--</p>
+            <div style="display:flex;flex-direction: row;gap: 10px;">
+                <a  class ="footer_credit_a lucida" target= "_blank" href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+                <a  class ="footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos">GitHub</a>
+                
+                
+
+            </div>
         </div>
 
     </footer>

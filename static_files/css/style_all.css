@@ -2,19 +2,48 @@
     --primary-color-lightblue:#39E6E3;
     --primary-color-green:#39E66D;
     --primary-color-blue:#397BE6;
+    --primary-color-background:#77C9D4;
     --secondary-color-rain:#184B66;
     --secondary-color-lightgreen:#39E6A9;
     --secondary-color-lightblue:#87E6E4;
-    --primary-color-background:#001a27;
+    
 }
 
 @font-face {
     font-family:Font-logo;
     src: url("../fonts/ArchivoBlack-Regular.ttf");
 }
-
+.gradient{
+    /* background-image:url("../media/images/background.png"); */
+    background-color:var(--primary-color-blue);
+    background: linear-gradient(0deg,rgba(57, 123, 230, 1) 0%, rgba(119, 201, 212, 1) 50%, rgba(57, 123, 230, 1) 100%);
+    min-height: 100vh;
+}
 .lucida{
     font-family: 'Lucida Sans';
+}
+.botoes_header_div{
+    width:fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:30px;
+    padding:20px;
+}
+.botoes_header_buttons{
+    height:30px ;
+    width:200px;
+    border-radius: 20px;
+    border-width: 0px;
+    background-color:var(--primary-color-blue);
+    font-size:15px;
+    color:white;
+    transition: background-color 1s;
+}
+.botoes_header_buttons:hover{
+    transition: background-color 1s;
+    background-color: #70a0ec;
+    cursor:pointer;
 }
 .header{
    /* Faz o header colar no teto da página */
@@ -27,7 +56,7 @@
     flex-direction:row;
     height:80px;
     background-color: var(--primary-color-blue);
-    border-radius:0px 0px 15px 15px;
+    /* border-radius:0px 0px 15px 15px; */
     z-index:100;
 }
 .logo_min{
@@ -36,7 +65,9 @@
     margin: 20px;
 }
 .logo_max{
-
+    width:80px;
+    height:80px;
+    margin: 20px;
 }
 .logo_nome_div{
     display: flex;
@@ -58,14 +89,20 @@
     transition: font-size 1s;
     cursor:pointer;
 }
-.footer{
-    background-color:var(--primary-color-blue);
-    height: 100px;
-    width:100%;
-    margin-top: 50px;
-    bottom:0;
+.logo_p_max{
+    color: white;
+  
+    font-size: 50px;
+   font-weight:bold;
+  
 }
-
+.logo_footer_p{
+    color: white;
+    
+    font-size: 30px;
+   font-weight:bold;
+   
+}
 .icon_calendar_img{
     width:50px;
     height:50px;
@@ -78,9 +115,31 @@
     width:52px;
     height: 52px;
     border-radius: 50px;
-    border-width: 1px;
+    border-width: 2px;
     border-color:var(--primary-color-green);
     border-style:solid;
-    padding: 2px;
-    background-color:var(--primary-color-green);
+    padding: 5px;
+    background-color:var(  --secondary-color-rain);
 }
+.footer{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:var(--primary-color-blue);
+    height: fit-content;
+    width:100%;
+   
+    
+}
+.footer_credit_a{
+    font-size:15px;
+    font-weight:bold;
+    color: white;
+}
+.footer_credit_p{
+     font-size:15px;
+    font-weight:bold;
+    color: white;
+}
+
+

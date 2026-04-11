@@ -1,0 +1,45 @@
+@import url("./style_all.css");
+.container{
+    display:flex;
+    flex-direction: column;
+    gap:0px;
+    justify-content: space-evenly;
+    margin-top:115px;
+    width:100%;
+    left: 0;
+    right: 0;
+    padding: 0px;
+    align-items: center;
+    height:fit-content;
+}
+.form_login_form{
+    background-color:var(--secondary-color-rain);
+    width:300px;
+    height:fit-content;
+    padding: 20px;
+    border-radius:20px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 110px;
+    top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.info_login_div{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.header_form_p{
+    width: 100%;
+   height: fit-content;
+   text-align: center;
+   padding:15px 0px 15px 0px;
+   font-size: 25px;
+   color:white;
+   border-width: 1px;
+    border-color: var(--secondary-color-lightblue);
+    border-style: solid hidden solid;
+}
