@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from argon2 import PasswordHasher
 from argon2 import exceptions as hash_exceptions
+from django.contrib import messages
 #Coleta as variaveis do .env#
 import os
 from dotenv import load_dotenv
@@ -21,7 +22,7 @@ def login(request):
     return render(request,'html/login_clima.html')
 
 def login_enter(request):
-    #Provisorio#----> Configurar o sql
+   
     load_dotenv()
     ph=PasswordHasher()
     HOST=os.getenv("HOST")
@@ -31,20 +32,43 @@ def login_enter(request):
     # Porta padrao #
     port_=5432
     if request.method == "POST":
-        email=request.POST.get("email")
-        password=request.POST.get("senha")
-        print(email)
-        connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
-        cursor=connection.cursor()
-        cursor.execute("select email,password from users where email=%s",[email])
-        user_obj=cursor.fetchall()
-        try:
-            if ph.verify(user_obj[0][1],password):
-                print("acertoooou")
-        except hash_exceptions.VerifyMismatchError:
-            print("merda")
+        _email=request.POST.get("email")
+        _password=request.POST.get("senha")
 
-            #### TRABALHANDO ###
+        
+        try:
+
+            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
+            cursor=connection.cursor()
+            cursor.execute("select name,password,icon,email from users where email=%s",[_email])
+            user_obj=cursor.fetchall()
+
+            # Gambiarra ----> força o python a verificar se tem algo nessa posicao
+            if user_obj[0][3]:
+                ...
+
+        except IndexError:
+            messages.error(request,"Login inválido")
+            return render(request,'html/login_clima.html')
+            
+        
+        
+        try:
+            if ph.verify(user_obj[0][1],_password):
+                context:dict={
+                    "name":user_obj[0][0],
+                    "auth":True,
+                    "icon":user_obj[0][2],
+                    "email":user_obj[0][3],
+                } 
+                return render(request,'html/dashboard_clima.html',context=context)
+            
+        except hash_exceptions.VerifyMismatchError:
+            messages.error(request,"Login inválido")
+            return render(request,'html/login_clima.html')
+
+
+            
             
         
         

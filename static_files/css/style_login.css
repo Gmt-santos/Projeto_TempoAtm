@@ -38,7 +38,7 @@
    text-align: center;
    padding:15px 5px 15px 5px;
    font-size: 25px;
-   color:white;
+   color:var(--primary-color-background);
    border-width: 1px;
    border-color: var(--secondary-color-lightblue);
    border-style: solid hidden solid;
@@ -72,4 +72,8 @@
     transition: background-color 1s;
     background-color: #70a0ec;
     cursor:pointer;
+}
+.text_input_p{
+    font-size:14px;
+    color:var(--primary-color-background);
 }

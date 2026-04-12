@@ -13,11 +13,16 @@
     font-family:Font-logo;
     src: url("../fonts/ArchivoBlack-Regular.ttf");
 }
+footer{
+    bottom:0;
+    width:100%;
+}
 .gradient{
     /* background-image:url("../media/images/background.png"); */
     background-color:var(--primary-color-blue);
     background: linear-gradient(0deg,rgba(57, 123, 230, 1) 0%, rgba(119, 201, 212, 1) 50%, rgba(57, 123, 230, 1) 100%);
-    min-height: 100vh;
+    min-height: 85vh;
+    margin: 10px;
 }
 .lucida{
     font-family: 'Lucida Sans';
@@ -128,7 +133,7 @@
     background-color:var(--primary-color-blue);
     height: fit-content;
     width:100%;
-   
+   bottom: 0;
     
 }
 .footer_credit_a{

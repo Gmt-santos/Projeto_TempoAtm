@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style_dashboard.css' %}">
+    <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
+    <title>Dashboard</title>
+</head>
+{% if not auth %}
+
+<div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login'%}"> <button class="botoes_header_buttons lucida">LOGIN</button></a>
+              
+               <a href=""><button class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+            </div>
+            
+        </div>
+         
+
+    </div> 
+    {% else %}
+{% endif %}
+<body class="gradient">
+   
+    <div class="container">
+        {% if not auth %}
+
+
+        
+            <div class="not_auth_div">
+            
+
+                    <div class="info_not_auth_div">
+                        <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                            <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
+
+                            <p class="title_not_auth_p lucida">
+                                Você não está logado!
+                            </p>
+                            
+                        </div>
+                        <div style="display:flex;flex-direction: column;align-items: center;gap:10px">
+
+                        <p class="lucida texto_auxiliar_botoes_p">Faça o login caso já tenha conta</p>
+                        <a style="width: 100%;" href="{% url 'clima:login'%}"> <button  style="width: 100%;" class="botoes_header_buttons lucida">LOGIN</button></a>
+                        <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
+                        <a style="width: 100%;" href=""><button style="width: 100%;"class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+
+
+
+
+
+                        </div>
+                        
+                       
+                    </div>
+                        
+            </div>
+
+
+        {%else%}
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {% endif%}
+    </div>
+   
+    <footer>
+        <div class="footer">
+             <div class="logo_nome_div">
+                <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+                 <p class="logo_footer_p lucida" >MatWeather</p>
+            </div>
+            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">Projeto educacional realizado por Gmt-santos</a>
+            <p class ="footer_credit_p lucida">--Todos os direitos reservados 2026--</p>
+            <div style="display:flex;flex-direction: row;gap: 10px;">
+                <a  class ="footer_credit_a lucida" target= "_blank" href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+                <a  class ="footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos">GitHub</a>
+                
+                
+
+            </div>
+        </div>
+
+</footer>
+</body>
+
+</html>
+
