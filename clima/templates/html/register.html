@@ -29,19 +29,26 @@
 
     <div class="container">
 
-            <form class="form_login_form" action="{% url 'clima:login_enter'%}" method="POST">
+            <form class="form_login_form" action="{% url 'clima:register_operation'%}" method="POST">
 
                  {% csrf_token %}
 
                 <div class="info_login_div">
 
                     <p class="lucida header_form_p ">Registre-se</p>
+                    
+                     <p class="text_input_p lucida">Nome</p>
+                    <input placeholder="Nome" class="email_input lucida"type="email" name="nome" id="nome" required>
 
                     <p class="text_input_p lucida">E-mail</p>
                     <input placeholder="meuemail@gmail.com" class="email_input lucida"type="email" name="email" id="email" required>
 
                     <p  class="text_input_p lucida">Senha</p>
                     <input  placeholder="Senha"class="password_input"type="password" name="senha" id="senha" required>
+
+                    <p  class="text_input_p lucida">Confirme a senha</p>
+                    <input  placeholder="Senha"class="password_input"type="password" name="confirmacao_senha" id="confirmacao_senha" required>  
+
 
                     <input class="submit_input" type="submit" value="Enviar">
 

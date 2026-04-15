@@ -7,7 +7,7 @@ import psycopg2
 
 # Create your views here.
 def intermediary_clima(request,_context:dict):
-  
+        #O intermediary_clima é usado apenas pelo programa,não tem motivo pra alguém entrar nele
         return redirect("clima:index")
     
 def dashboard_clima(request,email:str):
@@ -36,9 +36,9 @@ def dashboard_clima(request,email:str):
                         } 
                 return render(request,'html/dashboard_clima.html',context=context)
             else:
-                return redirect("clima:index")
+                return redirect("clima:login")
         else:
-            return redirect("clima:index")
+            return redirect("clima:login")
     #Caso a pessoa tente entrar sem nem ter auth
     except KeyError:
          return redirect("clima:login")

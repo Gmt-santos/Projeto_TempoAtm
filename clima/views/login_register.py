@@ -86,3 +86,26 @@ def login_out(request):
 
 def register(request):
     return render(request,'html/register.html')
+
+
+
+def register_operation(request):
+    if request.method == "POST":
+        load_dotenv()
+        ph=PasswordHasher()
+        HOST=os.getenv("HOST")
+        USER=os.getenv("USER")
+        PASSWORD=os.getenv("PASSWORD")
+        DATABASE=os.getenv("DATABASE")
+        # Porta padrao #
+        port_=5432
+        try:
+            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
+            cursor=connection.cursor()
+        except:
+            ...
+
+            ########### Continuar Trabalhando ##################
+
+
+        
