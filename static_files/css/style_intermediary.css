@@ -40,20 +40,34 @@
     font-size: 25px;
 }
 .texto_auxiliar_botoes_p{
-    font-size:15px;
+    font-size:20px;
     font-weight:bold;
     color: white;
 
 }
-
-/* Parte do usuário comum */
-
-.icon_user_img{
-    height:10px;
-    width:10px;
-    border-radius: 5px;
-
+.auth_div{
+    left:0;
+    top:0;
+    width:700px;
+    height:300px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary-color-rain);
+    border-radius:20px;
+    margin: 100px;
 }
-.hello_user_p{
-    
+.auth_title_div{
+    display:flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
+.title_auth_p{
+     color:white;
+    font-size: 25px;
+    margin:0px;
+    height: fit-content;
+} 
