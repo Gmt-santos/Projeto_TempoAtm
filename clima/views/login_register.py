@@ -33,7 +33,7 @@ def login_enter(request):
 
         
         try:
-
+            
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
             cursor.execute("select name,password,icon,email,fav_city from users where email=%s",[_email])
@@ -99,13 +99,33 @@ def register_operation(request):
         DATABASE=os.getenv("DATABASE")
         # Porta padrao #
         port_=5432
-        try:
-            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
-            cursor=connection.cursor()
-        except:
-            ...
+        nome=request.POST.get("nome")
+        email=request.POST.get("email")
+        senha=request.POST.get("senha")
+        confirmacao=request.POST.get("confirmacao_senha")
+        icone=request.POST.get("select")
+        if(senha == confirmacao and senha):
+            try:
+                connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
+                cursor=connection.cursor()
+                cursor.execute("select email from users where email = %s",[email])
+                user_obj=cursor.fetchall()
+                if(user_obj):
+                    # Já tem um email lá igual -----> TRATAR ERRO DEPOIS #
+                    messages.error(request,"Login inválido")
+                    connection.close()
+                    return render(request,'html/login_clima.html')
+                else:
+                    hash_senha=ph.hash(senha)
+                    cursor.execute("insert into users(name,password,icon,email)values(%s,%s,%s,%s)",[nome,hash_senha,icone,email])
+                    connection.commit()
+                    connection.close()
+                    return render(request,'html/login_clima.html')
+            except:
+                ...
 
-            ########### Continuar Trabalhando ##################
+                ########### Continuar Trabalhando ##################
+
 
 
         

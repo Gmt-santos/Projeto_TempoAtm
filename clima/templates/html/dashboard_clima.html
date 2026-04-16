@@ -36,9 +36,10 @@
              <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
             </div>
 
-            <div>
-                <img src="" alt="" class="icon_user_img">
+            <div class="header_hello_div">
+                <img src="{% static 'media/icons_user/'%}{{icon}}" alt="" class="icon_user_img">
                 <p class="hello_user_p lucida">Olá {{name}} !!!</p>
+
             </div>
 
             <div class="botoes_header_div">

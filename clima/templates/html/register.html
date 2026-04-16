@@ -34,11 +34,36 @@
                  {% csrf_token %}
 
                 <div class="info_login_div">
-
-                    <p class="lucida header_form_p ">Registre-se</p>
                     
+                    <p class="lucida header_form_p ">Registre-se</p>
+
+                    <p class="text_input_p lucida">Ícone</p>
+                        <div style="display: flex;justify-content: center;padding: 10px;">
+                              <img id="icon" class="icon_register_img"src="{%static 'media/icons_user/f1_icon.png'%}" alt="">
+                            
+                        </div>
+                      
+                        <select class="lucida"name="select" id="select">
+                            <option value="f1_icon.png" selected>Ícone feminino 1</option>
+                            <option value="f2_icon.png">Ícone feminino 2</option>
+                            <option value="f3_icon.png">Ícone feminino 3</option>
+                            <option value="f4_icon.png">Ícone feminino 4</option>
+                            <option value="f5_icon.png">Ícone feminino 5</option>
+                            <option value="f6_icon.png">Ícone feminino 6</option>
+                            <option value="f7_icon.png">Ícone feminino 7</option>
+                            <option value="f8_icon.png">Ícone feminino 8</option>
+                            <option value="f9_icon.png">Ícone feminino 9</option>
+                            <option value="m1_icon.png">Ícone masculino 1</option>
+                            <option value="m2_icon.png">Ícone masculino 2</option>
+                            <option value="m3_icon.png">Ícone masculino 3</option>
+                            <option value="m4_icon.png">Ícone masculino 4</option>
+                            <option value="m5_icon.png">Ícone masculino 5</option>
+                            <option value="m6_icon.png">Ícone masculino 6</option>
+                        </select>
+
+
                      <p class="text_input_p lucida">Nome</p>
-                    <input placeholder="Nome" class="email_input lucida"type="email" name="nome" id="nome" required>
+                    <input placeholder="Nome" class="email_input lucida"type="text" name="nome" id="nome" required>
 
                     <p class="text_input_p lucida">E-mail</p>
                     <input placeholder="meuemail@gmail.com" class="email_input lucida"type="email" name="email" id="email" required>
@@ -50,7 +75,7 @@
                     <input  placeholder="Senha"class="password_input"type="password" name="confirmacao_senha" id="confirmacao_senha" required>  
 
 
-                    <input class="submit_input" type="submit" value="Enviar">
+                    <input class="submit_input" type="submit" value="Registrar">
 
 
                 </div>
@@ -94,3 +119,17 @@
         </div>
 
 </footer>
+<script>
+    const selector=document.getElementById("select");
+    const icon=document.getElementById("icon");
+    //O django carrega esses statics lá em cima,antes do js ser carregado
+    //Portanto,ele carregará o path,mas deixará sem nada para nn dar erro
+    //Quando o usuário clicar e selecionar,aí sim ele juntará o base_path+
+    //url do icone.
+    const base_path="{% static 'media/icons_user/'%}";
+    selector.addEventListener('change',function(){
+        var value=selector.value;
+        icon.src=base_path+value;
+    });
+
+</script>

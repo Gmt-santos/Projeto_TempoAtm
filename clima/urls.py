@@ -9,5 +9,6 @@ urlpatterns = [
     path('login/out/',views.login_out,name="login_out"),
     path('dashboard_clima/<str:email>/',views.dashboard_clima,name="dashboard_clima"),
     path('intermediary_clima/<str:email>/',views.intermediary_clima,name="intermediary_clima"),
-    path('register/',views.register,name="register")
+    path('register/',views.register,name="register"),
+    path('register/operation',views.register_operation,name="register_operation")
 ]

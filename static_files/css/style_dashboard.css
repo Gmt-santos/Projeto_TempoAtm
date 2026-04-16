@@ -49,11 +49,19 @@
 /* Parte do usuário comum */
 
 .icon_user_img{
-    height:10px;
-    width:10px;
-    border-radius: 5px;
+    height:50px;
+    width:50px;
+    border-radius: 25px;
 
 }
 .hello_user_p{
-    
+    color: white;
+    font-size: 20px;
+}
+.header_hello_div{
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    width: 20%;
+    gap:10px;
 }

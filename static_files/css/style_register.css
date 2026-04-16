@@ -1,4 +1,10 @@
 @import url("./style_all.css");
+select{
+    appearance: none;
+    padding:5px;
+    border-radius:10px ;
+    font-size: 12px;
+}
 .container{
     display:flex;
     flex-direction: column;
@@ -76,4 +82,9 @@
 .text_input_p{
     font-size:14px;
     color:var(--primary-color-background);
+}
+.icon_register_img{
+    width:100px;
+    height:100px;
+    border-radius:100px;
 }
