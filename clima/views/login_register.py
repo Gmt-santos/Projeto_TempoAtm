@@ -36,7 +36,7 @@ def login_enter(request):
             
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
-            cursor.execute("select name,password,icon,email,fav_city from users where email=%s",[_email])
+            cursor.execute("select name,password,icon,email,fav_city,username from users where email=%s",[_email])
             user_obj=cursor.fetchall()
             connection.close()
             # Gambiarra ----> força o python a verificar se tem algo nessa posicao
@@ -44,7 +44,7 @@ def login_enter(request):
                 ...
 
         except IndexError:
-            messages.error(request,"Login inválido")
+            messages.error(request,"Esse email não está cadastrado ou a senha é inválida")
             connection.close()
             return render(request,'html/login_clima.html')
             
@@ -55,10 +55,10 @@ def login_enter(request):
             if ph.verify(user_obj[0][1],_password):
                 context:dict={
                     "name":user_obj[0][0],
-                    "auth":True,
                     "icon":user_obj[0][2],
                     "email":user_obj[0][3],
                     "fav_city":user_obj[0][4],
+                    "username":user_obj[0][5],
                 } 
 # O auth e o email sao responsabilidade do django e servem para salvar a sessao do usuario e o email dele
 # assim,ninguem consegue entrar usando apenas a url. Não há nenhuma forma segura de fazer isso sem usar o django nesse caso
@@ -69,7 +69,7 @@ def login_enter(request):
                 return render(request,'html/intermediary_clima.html',context=context)
             
         except hash_exceptions.VerifyMismatchError:
-            messages.error(request,"Login inválido")
+            messages.error(request,"Esse email não está cadastrado ou a senha é inválida")
             connection.close()
             return render(request,'html/login_clima.html')
 
@@ -104,25 +104,30 @@ def register_operation(request):
         senha=request.POST.get("senha")
         confirmacao=request.POST.get("confirmacao_senha")
         icone=request.POST.get("select")
+        username=request.POST.get("username")
         if(senha == confirmacao and senha):
             try:
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
                 cursor=connection.cursor()
-                cursor.execute("select email from users where email = %s",[email])
+                cursor.execute("select username,email from users where email = %s or username=%s",[email,username])
                 user_obj=cursor.fetchall()
                 if(user_obj):
                     # Já tem um email lá igual -----> TRATAR ERRO DEPOIS #
-                    messages.error(request,"Login inválido")
+                    messages.error(request,"Esse email já está cadastrado")
                     connection.close()
                     return render(request,'html/login_clima.html')
                 else:
                     hash_senha=ph.hash(senha)
-                    cursor.execute("insert into users(name,password,icon,email)values(%s,%s,%s,%s)",[nome,hash_senha,icone,email])
+                    cursor.execute("insert into users(name,password,icon,email,username)values(%s,%s,%s,%s,%s)"
+                                   ,[nome,hash_senha,icone,email,username])
+                    
                     connection.commit()
                     connection.close()
                     return render(request,'html/login_clima.html')
-            except:
-                ...
+            except psycopg2.OperationalError as error:
+                messages.error(request,"Houve um erro ao cadastrar,tente novamente mais tarde")
+                return render(request,'html/login_clima.html')
+                
 
                 ########### Continuar Trabalhando ##################
 

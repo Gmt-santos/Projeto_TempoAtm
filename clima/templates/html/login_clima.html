@@ -42,6 +42,19 @@
 
                     <p  class="text_input_p lucida">Senha</p>
                     <input  placeholder="Senha"class="password_input"type="password" name="senha" id="senha" required>
+                    {% if messages %}
+                         {% for message in messages%}
+                            <div class="messages">
+
+                                 <p class="lucida error_p">{{message}}</p>
+
+
+                            </div>
+
+                         {% endfor %}
+
+          
+                    {% endif %}
 
                     <input class="submit_input" type="submit" value="Enviar">
 
@@ -51,7 +64,7 @@
 
 
             </form>
-       
+            
 
 
     </div>
