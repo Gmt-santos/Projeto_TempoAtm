@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style_dashboard.css' %}">
+     <link rel="stylesheet" href="{% static 'css/style_perfil.css' %}">
     <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
     <title>Dashboard</title>
 </head>
@@ -36,13 +37,21 @@
              <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
             </div>
 
+            <div class="botoes_header_div">
+
+                <a href="{% url 'clima:dashboard_clima' %}"> <button class="botoes_header_buttons lucida">VOLTAR</button></a>
+            </div>
+
+
             <div class="header_hello_div">
-                <img src="{% static 'media/icons_user/'%}{{icon}}" alt="" class="icon_user_img">
-                <p class="hello_user_p lucida">Olá {{name}} !!!</p>
+                <img src="{% static 'media/icons_user/'%}{{request.session.icon}}" alt="" class="icon_user_img">
+                <p class="hello_user_p lucida">Olá {{request.session.name}} !!!</p>
 
             </div>
 
             <div class="botoes_header_div">
+                
+              
                 <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons lucida">LOGOUT</button></a>
               
               
@@ -93,7 +102,118 @@
 
 
         {%else%}
+       
+
+            <form class="form_login_form" action="{% url 'clima:update_operation'%}" method="POST">
+
+                 {% csrf_token %}
+
+                <div class="info_login_div">
+                    
+                    <p class="lucida header_form_p ">Atualize seus dados</p>
+
+                    <p class="text_input_p lucida">Ícone</p>
+                        <div style="display: flex;justify-content: center;padding: 10px;">
+                              <img id="icon" class="icon_register_img"src="{%static 'media/icons_user/f1_icon.png'%}" alt="">
+                            
+                        </div>
+                      
+                        <select class="lucida"name="select" id="select">
+                            <option value="f1_icon.png" selected>Ícone feminino 1</option>
+                            <option value="f2_icon.png">Ícone feminino 2</option>
+                            <option value="f3_icon.png">Ícone feminino 3</option>
+                            <option value="f4_icon.png">Ícone feminino 4</option>
+                            <option value="f5_icon.png">Ícone feminino 5</option>
+                            <option value="f6_icon.png">Ícone feminino 6</option>
+                            <option value="f7_icon.png">Ícone feminino 7</option>
+                            <option value="f8_icon.png">Ícone feminino 8</option>
+                            <option value="f9_icon.png">Ícone feminino 9</option>
+                            <option value="m1_icon.png">Ícone masculino 1</option>
+                            <option value="m2_icon.png">Ícone masculino 2</option>
+                            <option value="m3_icon.png">Ícone masculino 3</option>
+                            <option value="m4_icon.png">Ícone masculino 4</option>
+                            <option value="m5_icon.png">Ícone masculino 5</option>
+                            <option value="m6_icon.png">Ícone masculino 6</option>
+                        </select>
+                        <p class="text_input_p lucida">Cidade favorita</p>
+                        <div style="display: flex;flex-direction: row;width:100%;gap:5px;">
+                           <img id="country_icon"class="image_side_input"src="{%static 'media/country_icons/brasil_icon.webp'%}" alt=""> 
+                            <select class="lucida country_select" name="country" id="country" required>
+                                {% for city in cities  %}
+                                    <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}}" >{{city.1}}-{{city.2}}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                     <p class="text_input_p lucida">Nome</p>
+                    <input placeholder="Nome" class="email_input lucida"type="text" name="nome" id="nome" value="{{request.session.name}}" required>
+
+                    <p class="text_input_p lucida">Nome de usuário</p>
+                    <input placeholder="Usuário" class="email_input lucida"type="text" name="username" id="username"value="{{request.session.username}}" readonly>
+
+                    <p class="text_input_p lucida">E-mail</p>
+                    <input placeholder="meuemail@gmail.com" class="email_input lucida"type="email" name="email" id="email" value="{{request.session.email}}" readonly>
+
+
+
+
+                    <input class="submit_input" type="submit" value="Atualizar">
+
+
+                </div>
+                
+
+
+            </form>
+       
+
+
+    
         {% endif %}
     </div>
+    <footer>
+        <div class="footer">
+             <div class="logo_nome_div">
+                <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+                 <p class="logo_footer_p lucida" >MatWeather</p>
+            </div>
+            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">Projeto educacional realizado por Gmt-santos</a>
+            <p class ="footer_credit_p lucida">--Todos os direitos reservados 2026--</p>
+            <div style="display:flex;flex-direction: row;gap: 10px;">
+                <a  class ="footer_credit_a lucida" target= "_blank" href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+                <a  class ="footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos">GitHub</a>
+                
+                
+
+            </div>
+        </div>
+
+    </footer>
 </body>
 </html>
+<script>
+    const selector=document.getElementById("select");
+    const icon=document.getElementById("icon");
+    //O django carrega esses statics lá em cima,antes do js ser carregado
+    //Portanto,ele carregará o path,mas deixará sem nada para nn dar erro
+    //Quando o usuário clicar e selecionar,aí sim ele juntará o base_path+
+    //url do icone.
+    const base_path="{% static 'media/icons_user/'%}";
+    selector.addEventListener('change',function(){
+        var value=selector.value;
+        icon.src=base_path+value;
+    });
+
+    const selector_country = document.getElementById("country");
+    const image = document.getElementById("country_icon");
+
+    selector_country.addEventListener("change", function(){
+
+        const option =
+            selector_country.options[selector_country.selectedIndex];
+
+             image.src = option.dataset.icon;
+
+    });
+</script>

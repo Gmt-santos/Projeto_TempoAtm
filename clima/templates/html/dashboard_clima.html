@@ -37,12 +37,12 @@
             </div>
               <div class="botoes_header_div">
 
-                <a href="{% url 'clima:perfil' username icon%}"> <button class="botoes_header_buttons lucida">Perfil</button></a>
+                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
               
             </div>
             <div class="header_hello_div">
-                <img src="{% static 'media/icons_user/'%}{{icon}}" alt="" class="icon_user_img">
-                <p class="hello_user_p lucida">Olá {{name}} !!!</p>
+                <img src="{% static 'media/icons_user/'%}{{request.session.icon}}" alt="" class="icon_user_img">
+                <p class="hello_user_p lucida">Olá {{request.session.name}} !!!</p>
 
             </div>
 

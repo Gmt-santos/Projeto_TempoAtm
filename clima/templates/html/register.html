@@ -10,7 +10,7 @@
 </head>
 <body class="gradient">
      <div style="display: block; height: fit-content;" >
-        <div class="header">
+        <div class="header">    
             <div class="logo_nome_div">
              <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
              <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
@@ -61,7 +61,16 @@
                             <option value="m6_icon.png">Ícone masculino 6</option>
                         </select>
 
+                        <p class="text_input_p lucida">Cidade favorita</p>
+                        <div style="display: flex;flex-direction: row;width:100%;gap:5px;">
+                           <img id="country_icon"class="image_side_input"src="{%static 'media/country_icons/brasil_icon.webp'%}" alt=""> 
+                            <select class="lucida country_select" name="country" id="country" required>
+                                {% for city in cities  %}
+                                    <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}}" >{{city.1}}-{{city.2}}</option>
+                                {% endfor %}
 
+                            </select>
+                        </div>
                      <p class="text_input_p lucida">Nome</p>
                     <input placeholder="Nome" class="email_input lucida"type="text" name="nome" id="nome" required>
 
@@ -134,5 +143,18 @@
         var value=selector.value;
         icon.src=base_path+value;
     });
+    const selector_country = document.getElementById("country");
+    const image = document.getElementById("country_icon");
+
+    selector_country.addEventListener("change", function(){
+
+        const option =
+            selector_country.options[selector_country.selectedIndex];
+
+             image.src = option.dataset.icon;
+
+    });
+
+    
 
 </script>

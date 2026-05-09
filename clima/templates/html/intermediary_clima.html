@@ -88,11 +88,11 @@
         <div class="auth_div">
             <div class="auth_title_div">
                 <img class="logo_max" src="{% static 'media/icons/autorizado_icon.png'%}" alt="">
-                <p class="title_auth_p lucida">Você está logado(a) {{name}} ! </p>
+                <p class="title_auth_p lucida">Você está logado(a) {{request.session.name}} ! </p>
                 
             </div>
             <p class="lucida texto_auxiliar_botoes_p">Clique abaixo para entrar em seu Dashboard</p>
-            <a style="width:70%;"href="{% url 'clima:dashboard_clima' username %}"> <button style="width:100%"class="botoes_header_buttons lucida">Entrar</button></a>
+            <a style="width:70%;"href="{% url 'clima:dashboard_clima'  %}"> <button style="width:100%"class="botoes_header_buttons lucida">Entrar</button></a>
 
 
 

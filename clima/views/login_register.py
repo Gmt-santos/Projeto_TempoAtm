@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 # postgre + python
 import psycopg2
 
+
+
 # Create your views here.
 def login(request):
     context={
@@ -53,20 +55,18 @@ def login_enter(request):
         try:
             
             if ph.verify(user_obj[0][1],_password):
-                context:dict={
-                    "name":user_obj[0][0],
-                    "icon":user_obj[0][2],
-                    "email":user_obj[0][3],
-                    "fav_city":user_obj[0][4],
-                    "username":user_obj[0][5],
-                } 
+                request.session["name"]=user_obj[0][0]
+                request.session["icon"]=user_obj[0][2]
+                request.session["fav_city"]=user_obj[0][4]
+                request.session["username"]=user_obj[0][5]
+                
 # O auth e o email sao responsabilidade do django e servem para salvar a sessao do usuario e o email dele
 # assim,ninguem consegue entrar usando apenas a url. Não há nenhuma forma segura de fazer isso sem usar o django nesse caso
 #
-                request.session['email']=context["email"]
+                request.session['email']=user_obj[0][3]
                 request.session['auth']=True
                 connection.close()
-                return render(request,'html/intermediary_clima.html',context=context)
+                return render(request,'html/intermediary_clima.html')
             
         except hash_exceptions.VerifyMismatchError:
             messages.error(request,"Esse email não está cadastrado ou a senha é inválida")
@@ -79,13 +79,29 @@ def login_enter(request):
 def login_out(request):
     request.session['auth']=False
     request.session['email']=None
+    request.session.flush()
     return render(request,'html/login_clima.html')
 
 
 
 
 def register(request):
-    return render(request,'html/register.html')
+    load_dotenv()
+    HOST=os.getenv("HOST")
+    USER=os.getenv("USER")
+    PASSWORD=os.getenv("PASSWORD")
+    DATABASE=os.getenv("DATABASE")
+    # Porta padrao #
+    port_=5432
+    connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
+    cursor=connection.cursor()
+    cursor.execute("select id,name,country,icon from cities")
+    country_obj=cursor.fetchall()
+    context={
+        "cities":country_obj
+    }
+    
+    return render(request,'html/register.html',context)
 
 
 
@@ -105,6 +121,7 @@ def register_operation(request):
         confirmacao=request.POST.get("confirmacao_senha")
         icone=request.POST.get("select")
         username=request.POST.get("username")
+        fav_city=request.POST.get("country")
         if(senha == confirmacao and senha):
             try:
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
@@ -113,13 +130,13 @@ def register_operation(request):
                 user_obj=cursor.fetchall()
                 if(user_obj):
                     # Já tem um email lá igual -----> TRATAR ERRO DEPOIS #
-                    messages.error(request,"Esse email já está cadastrado")
+                    messages.error(request,"Esse email ou usuário já está cadastrado")
                     connection.close()
                     return render(request,'html/login_clima.html')
                 else:
                     hash_senha=ph.hash(senha)
-                    cursor.execute("insert into users(name,password,icon,email,username)values(%s,%s,%s,%s,%s)"
-                                   ,[nome,hash_senha,icone,email,username])
+                    cursor.execute("insert into users(name,password,icon,fav_city,email,username)values(%s,%s,%s,%s,%s,%s)"
+                                   ,[nome,hash_senha,icone,fav_city,email,username])
                     
                     connection.commit()
                     connection.close()
@@ -132,5 +149,32 @@ def register_operation(request):
                 ########### Continuar Trabalhando ##################
 
 
-
-        
+def update_operation(request):
+        try:
+            if request.method == "POST":
+                load_dotenv()
+                HOST=os.getenv("HOST")
+                USER=os.getenv("USER")
+                PASSWORD=os.getenv("PASSWORD")
+                DATABASE=os.getenv("DATABASE")
+                # Porta padrao #
+                port_=5432
+                connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
+                cursor=connection.cursor()
+                nome=request.POST.get("nome")
+                icone=request.POST.get("select")
+                fav_city=request.POST.get("country")
+                print(nome,icone)
+                username=request.POST.get("username")
+                cursor.execute("update users set name=%s,icon=%s,fav_city=%s where username=%s",[nome,icone,fav_city,request.session["username"]])
+                connection.commit()
+                request.session["icon"]=icone
+                request.session["name"]=nome
+                connection.close()
+                return redirect("clima:dashboard_clima")
+            else:
+                connection.close()
+                return redirect("clima:index")
+        except psycopg2.OperationalError:
+                connection.close()
+                return redirect("clima:dashboard")
