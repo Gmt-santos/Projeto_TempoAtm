@@ -38,7 +38,8 @@ def login_enter(request):
             
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
-            cursor.execute("select name,password,icon,email,fav_city,username from users where email=%s",[_email])
+            cursor.execute("select users.name,users.password,users.icon,users.email,cities.name,username from users join " \
+            "cities on users.fav_city=cities.id where users.email=%s",[_email])
             user_obj=cursor.fetchall()
             connection.close()
             # Gambiarra ----> força o python a verificar se tem algo nessa posicao

@@ -1,10 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib import messages
+import datetime
+import utils
 #Coleta as variaveis do .env#
 import os
 from dotenv import load_dotenv
 # postgre + python
 import psycopg2
-from django.contrib import messages
+
 
 # Create your views here.
 def intermediary_clima(request,_context:dict):
@@ -14,6 +17,8 @@ def intermediary_clima(request,_context:dict):
 def dashboard_clima(request):
      #Procura na pasta templates DIRETAMENTE
     #Fica subentendido o templates/...
+     mes_atual=datetime.date.month
+
      try:
         if(request.session["auth"] ==  True):
             load_dotenv()

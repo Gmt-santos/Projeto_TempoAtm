@@ -119,6 +119,7 @@
                         </div>
                       
                         <select class="lucida"name="select" id="select">
+                            
                             <option value="f1_icon.png" selected>Ícone feminino 1</option>
                             <option value="f2_icon.png">Ícone feminino 2</option>
                             <option value="f3_icon.png">Ícone feminino 3</option>
@@ -137,10 +138,19 @@
                         </select>
                         <p class="text_input_p lucida">Cidade favorita</p>
                         <div style="display: flex;flex-direction: row;width:100%;gap:5px;">
-                           <img id="country_icon"class="image_side_input"src="{%static 'media/country_icons/brasil_icon.webp'%}" alt=""> 
+                            {% for city in cities  %}
+                                {% if city.0 == request.session.fav_city %}
+                                    <img id="country_icon"class="image_side_input"src="/static/media/country_icons/{{city.2}}_icon.webp" alt="">
+                                {% endif %}
+                            {%endfor%}
+                            
                             <select class="lucida country_select" name="country" id="country" required>
                                 {% for city in cities  %}
-                                    <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}}" >{{city.1}}-{{city.2}}</option>
+                                    {% if city.0 == request.session.fav_city %}
+                                        <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}}" selected >{{city.1}}-{{city.2}}</option>
+                                    {%else%}
+                                        <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}}" >{{city.1}}-{{city.2}}</option>
+                                    {% endif %}
                                 {% endfor %}
 
                             </select>
