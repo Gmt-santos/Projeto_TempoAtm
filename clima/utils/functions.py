@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 import psycopg2
-import datetime
+import datetime as dt
 import calendar as cal
 def lista_de_dias(primeiro_dia,tamanho_mes):
     lista=[]
@@ -52,3 +52,38 @@ def coletar_primeirodia_mes(ano,mes):
     cal.setfirstweekday(6)
     tupla=cal.monthrange(ano,mes)
     return tupla
+
+def string_mes(mes):
+    match mes:
+        case 1:
+            return "Janeiro"
+        case 2:
+            return "Fevereiro"
+        case 3:
+            return "Março"
+        case 4:
+            return "Abril"
+        case 5:
+            return "Maio"
+        case 6:
+            return "Junho"
+        case 7:
+            return "Julho"
+        case 8:
+            return "Agosto"
+        case 9:
+            return "Setembro"
+        case 10:
+            return "Outubro"
+        case 11:
+            return "Novembro"
+        case 12:
+            return "Dezembro"
+
+def mes_real():
+    __obj=dt.date.today()
+    return int(__obj.month)
+
+def ano_real():
+    __obj=dt.date.today()
+    return int(__obj.year)

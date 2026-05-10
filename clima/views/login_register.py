@@ -75,10 +75,12 @@ def login_enter(request):
                 dia_atual=hoje.day
                 request.session["mes_atual"]=int(mes_atual)
                 request.session["ano_atual"]=int(ano_atual)
-                request.session["dia_atual"]=int(hoje.day)
-# O auth e o email sao responsabilidade do django e servem para salvar a sessao do usuario e o email dele
-# assim,ninguem consegue entrar usando apenas a url. Não há nenhuma forma segura de fazer isso sem usar o django nesse caso
-#
+                request.session["dia_atual"]=int(dia_atual)
+
+                # O auth e o email sao responsabilidade do django e servem para salvar a sessao do usuario e o email dele
+                # assim,ninguem consegue entrar usando apenas a url. 
+                # Não há nenhuma forma segura de fazer isso sem usar o django nesse caso
+                
                 request.session['email']=user_obj[0][3]
                 request.session['auth']=True
                 connection.close()

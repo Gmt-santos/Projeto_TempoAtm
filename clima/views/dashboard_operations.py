@@ -43,7 +43,10 @@ def dashboard_clima(request):
                 context={
                      
                      "calendar_range":utils.lista_de_dias(primeiro_dia,tamanho_calendario),
-                     
+                     "string_month":utils.string_mes(request.session["mes_atual"]),
+                     "real_month":utils.mes_real(),
+                     "real_year":utils.ano_real()
+
                 }
                 
                 return render(request,'html/dashboard_clima.html',context=context)
@@ -67,19 +70,20 @@ def dashboard_clima(request):
      
 #FUNÇÕES PARA ATUALIZAR MES E DATA #
 
-def update_mes_plus(request):
+def update_month_plus(request):
      if request.session["mes_atual"] == 12:
           request.session["ano_atual"]+=1
           request.session["mes_atual"]=1
      else:
           request.session["mes_atual"]+=1
      return redirect("clima:dashboard_clima")
-def update_mes_minus(request):
-      if request.session["mes_atual"] == 12:
-          request.session["ano_atual"]+=1
-          request.session["mes_atual"]=1
+
+def update_month_minus(request):
+      if request.session["mes_atual"] == 1:
+          request.session["ano_atual"]-=1
+          request.session["mes_atual"]=12
       else:
-          request.session["mes_atual"]+=1
+          request.session["mes_atual"]-=1
       return redirect("clima:dashboard_clima")
 
 

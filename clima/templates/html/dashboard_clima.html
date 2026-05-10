@@ -100,7 +100,12 @@
     <div class="menu_div">
 
         <div class="calendario_div">
-            <table style="width:100%;height:100%">
+            <div style="display: flex;justify-content: center;">
+                
+                <p class="lucida calendario_p">Calendário de {{string_month}} de {{request.session.ano_atual}}</p>
+            </div>
+           
+            <table>
                 <tr>
                     <th>DOM</th>
                     <th>SEG</th>
@@ -119,20 +124,47 @@
                         </tr>
                         <tr>
                     {% endif %}
-                    {% if request.session.dia_atual == day %}
-                    <td>{{day}} hello</td>
+
+                    {% if request.session.dia_atual == day and real_year == request.session.ano_atual and real_month == request.session.mes_atual %}
+                    
+
+                        <td class="lucida dia_atual_td">{{day}}</td>
+
                     {% else %}
-                    <td>{{day}}</td>
+
+                        <td class=" lucida dia_td">{{day}}</td>
+
                     {% endif %}
+
                     {% if forloop.last %}
+
                         </tr>
+
                     {% endif %}
+
                 {% endfor %}
             </table>
+            <div style="width:100%;display:flex;flex-direction: row;">
+                 <a href="{% url 'clima:update_month_minus'%}"> <button class="botoes_calendario_buttons lucida">MÊS ANTERIOR</button></a>
+              
+               <a href="{% url 'clima:update_month_plus' %}"><button class="botoes_calendario_buttons lucida">PRÓXIMO MÊS</button></a>
+            </div>
         </div>
 
 
+
+        <div class="submenu_div">
+        
+                <p class="lucida calendario_p">Próximos eventos:(finalizar depois)</p>
+                <!-- PARTE DOS PRÓXIMOS EVENTOS -->
+        </div>
+
+
+
+
     </div>
+
+   
         
 
 
