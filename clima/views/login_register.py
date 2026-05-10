@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from argon2 import PasswordHasher
 from argon2 import exceptions as hash_exceptions
 from django.contrib import messages
+import datetime
 #Coleta as variaveis do .env#
 import os
 from dotenv import load_dotenv
@@ -15,9 +16,17 @@ def login(request):
     context={
        
     }
-    #Procura na pasta templates DIRETAMENTE
-    #Fica subentendido o templates/...
-    return render(request,'html/login_clima.html')
+    try:
+        
+        if(request.session["username"] and request.session["auth"]):
+            return redirect("clima:dashboard_clima")
+    except IndexError:
+            return render(request,'html/login_clima.html')
+    except KeyError:
+            return render(request,'html/login_clima.html')
+        #Procura na pasta templates DIRETAMENTE
+        #Fica subentendido o templates/...
+    
 
 def login_enter(request):
    
@@ -42,7 +51,7 @@ def login_enter(request):
             "cities on users.fav_city=cities.id where users.email=%s",[_email])
             user_obj=cursor.fetchall()
             connection.close()
-            # Gambiarra ----> força o python a verificar se tem algo nessa posicao
+            # força o python a verificar se tem algo nessa posicao
             if user_obj[0][3]:
                 ...
 
@@ -60,7 +69,13 @@ def login_enter(request):
                 request.session["icon"]=user_obj[0][2]
                 request.session["fav_city"]=user_obj[0][4]
                 request.session["username"]=user_obj[0][5]
-                
+                hoje=datetime.date.today()
+                mes_atual=hoje.month
+                ano_atual=hoje.year
+                dia_atual=hoje.day
+                request.session["mes_atual"]=int(mes_atual)
+                request.session["ano_atual"]=int(ano_atual)
+                request.session["dia_atual"]=int(hoje.day)
 # O auth e o email sao responsabilidade do django e servem para salvar a sessao do usuario e o email dele
 # assim,ninguem consegue entrar usando apenas a url. Não há nenhuma forma segura de fazer isso sem usar o django nesse caso
 #

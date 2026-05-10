@@ -1,13 +1,13 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 import datetime
-import utils
+import calendar
 #Coleta as variaveis do .env#
 import os
 from dotenv import load_dotenv
 # postgre + python
 import psycopg2
-
+from .. import utils
 
 # Create your views here.
 def intermediary_clima(request,_context:dict):
@@ -17,8 +17,9 @@ def intermediary_clima(request,_context:dict):
 def dashboard_clima(request):
      #Procura na pasta templates DIRETAMENTE
     #Fica subentendido o templates/...
-     mes_atual=datetime.date.month
-
+     
+     primeiro_dia,tamanho_calendario=utils.coletar_primeirodia_mes(request.session["ano_atual"],request.session["mes_atual"])
+     
      try:
         if(request.session["auth"] ==  True):
             load_dotenv()
@@ -39,12 +40,18 @@ def dashboard_clima(request):
                 request.session["fav_city"]=user_obj[0][3]
                 request.session["username"]=user_obj[0][4]
                 connection.close()
-                return render(request,'html/dashboard_clima.html')
+                context={
+                     
+                     "calendar_range":utils.lista_de_dias(primeiro_dia,tamanho_calendario),
+                     
+                }
+                
+                return render(request,'html/dashboard_clima.html',context=context)
             else:
                 connection.close()
                 return redirect("clima:login")
         else:
-            connection.close()
+            
             return redirect("clima:login")
     
      except KeyError:
@@ -58,6 +65,24 @@ def dashboard_clima(request):
         messages.error(request,"Houve um erro ao cadastrar,tente novamente mais tarde")
         return render(request,'html/login_clima.html')
      
+#FUNÇÕES PARA ATUALIZAR MES E DATA #
+
+def update_mes_plus(request):
+     if request.session["mes_atual"] == 12:
+          request.session["ano_atual"]+=1
+          request.session["mes_atual"]=1
+     else:
+          request.session["mes_atual"]+=1
+     return redirect("clima:dashboard_clima")
+def update_mes_minus(request):
+      if request.session["mes_atual"] == 12:
+          request.session["ano_atual"]+=1
+          request.session["mes_atual"]=1
+      else:
+          request.session["mes_atual"]+=1
+      return redirect("clima:dashboard_clima")
+
+
 def perfil(request):
     try:
         if(request.session["auth"] == True):

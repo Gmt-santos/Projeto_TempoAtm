@@ -28,7 +28,7 @@
          
 
     </div> 
-    {% else %}
+{% else %}
     <div style="display: block; height: fit-content;" >
         <div class="header">
             <div class="logo_nome_div">
@@ -96,8 +96,43 @@
             </div>
 
 
-        {%else%}
-        
+    {%else%}
+    <div class="menu_div">
+
+        <div class="calendario_div">
+            <table style="width:100%;height:100%">
+                <tr>
+                    <th>DOM</th>
+                    <th>SEG</th>
+                    <th>TER</th>
+                    <th>QUA</th>
+                    <th>QUI</th>
+                    <th>SEX</th>
+                    <th>SAB</th>
+                    
+                </tr>
+                {% for day in calendar_range%}
+
+                    {% if forloop.first %}
+                        <tr>
+                    {% elif forloop.counter0 != 0 and forloop.counter0|divisibleby:7 %}
+                        </tr>
+                        <tr>
+                    {% endif %}
+                    {% if request.session.dia_atual == day %}
+                    <td>{{day}} hello</td>
+                    {% else %}
+                    <td>{{day}}</td>
+                    {% endif %}
+                    {% if forloop.last %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+
+
+    </div>
         
 
 
