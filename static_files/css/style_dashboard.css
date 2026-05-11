@@ -72,42 +72,28 @@
     border-radius:20px;
     display:flex;
     flex-direction: row;
+    gap:10px;
 
-}
-.calendario_div{
-    display:flex;
-    flex-direction: column;
-    width:50%;
-    height: 400px;
-    background-color: var(--secondary-color-rain);
-    border-radius: 10px;
-    padding:10px;
-}
-.calendario_p{
-    margin:0px;
-    font-size:20px;
-    color:white;
-}
-
-.botoes_calendario_buttons{
-    height:30px ;
-    width:200px;
-    border-radius: 0px 0px 5px 5px;
-    border-width: 0px;
-    background-color:var(--secondary-color-rain);
-    font-size:15px;
-    color:white;
-    transition: background-color 1s;
-}
-.botoes_calendario_buttons:hover{
-    transition: background-color 1s;
-    background-color: #70a0ec;
-    cursor:pointer;
 }
 .submenu_div{
     display:flex;
     flex-direction: column;
+    width: 50%;
+    
 }
+.proximos_eventos_div{
+    display:flex;
+    flex-direction: column;
+    min-height: fit-content;
+    background-color: var(--primary-color-green);
+    border-radius: 20px;
+    padding:10px;
+}
+
+
+
+
+
 
 /* CALENDARIO DESIGN */
 table{
@@ -142,4 +128,34 @@ th{
     transition: background-color 1s;
     background-color: #70a0ec;
     cursor:pointer;
+}
+
+.botoes_calendario_buttons{
+    height:30px ;
+    width:200px;
+    border-radius: 0px 0px 5px 5px;
+    border-width: 0px;
+    background-color:var(--secondary-color-rain);
+    font-size:15px;
+    color:white;
+    transition: background-color 1s;
+}
+.botoes_calendario_buttons:hover{
+    transition: background-color 1s;
+    background-color: #70a0ec;
+    cursor:pointer;
+}
+.calendario_p{
+    margin:0px;
+    font-size:20px;
+    color:white;
+}
+.calendario_div{
+    display:flex;
+    flex-direction: column;
+    width:50%;
+    height: 400px;
+    background-color: var(--secondary-color-rain);
+    border-radius: 10px;
+    padding:10px;
 }

@@ -31,22 +31,35 @@ def dashboard_clima(request):
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
             
-            cursor.execute("select name,icon,email,fav_city,username from users where username=%s",[request.session["username"]])
+            cursor.execute("select users.name,users.icon,users.email,users.fav_city,users.username,events.nome,events.dia,events.color " \
+            "from users left join events " \
+            "on users.id=events.fk_id_user where username=%s order by events.dia limit 5",[request.session["username"]])
+
             user_obj=cursor.fetchall()
+            
             #Verifica se o email da url é o da sessao,evita que o cara invada outros emails com o auth=true
             if(user_obj[0][2] == request.session['email']):
+                connection.close()
+                events=[]
+                for event in user_obj:
+                                #nome       #dia        #cor
+                 events.append([event[5],event[6],event[7]])
+                print(user_obj)
+                print(events)
                 request.session["name"]=user_obj[0][0]
                 request.session["icon"]=user_obj[0][1]
                 request.session["fav_city"]=user_obj[0][3]
                 request.session["username"]=user_obj[0][4]
-                connection.close()
+                
+               
+                     
                 context={
                      
                      "calendar_range":utils.lista_de_dias(primeiro_dia,tamanho_calendario),
                      "string_month":utils.string_mes(request.session["mes_atual"]),
                      "real_month":utils.mes_real(),
-                     "real_year":utils.ano_real()
-
+                     "real_year":utils.ano_real(),
+                     "events":events
                 }
                 
                 return render(request,'html/dashboard_clima.html',context=context)

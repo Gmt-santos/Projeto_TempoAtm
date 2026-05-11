@@ -1,0 +1,13 @@
+@import url("./style_all.css");
+.event_div{
+    width: 100%;
+    height:fit-content;
+    padding:10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.event_icon_img{
+    width:40px;
+    height: 40px;
+}
