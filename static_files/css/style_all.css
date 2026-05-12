@@ -13,6 +13,9 @@
     font-family:Font-logo;
     src: url("../fonts/ArchivoBlack-Regular.ttf");
 }
+option{
+    cursor: pointer;
+}
 footer{
     bottom:0;
     width:100%;
@@ -148,3 +151,20 @@ footer{
 }
 
 
+.icon_user_img{
+    height:50px;
+    width:50px;
+    border-radius: 25px;
+
+}
+.hello_user_p{
+    color: white;
+    font-size: 20px;
+}
+.header_hello_div{
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    width: 20%;
+    gap:10px;
+}   

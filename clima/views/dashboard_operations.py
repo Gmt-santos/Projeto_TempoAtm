@@ -31,21 +31,26 @@ def dashboard_clima(request):
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
             
-            cursor.execute("select users.name,users.icon,users.email,users.fav_city,users.username,events.nome,events.dia,events.color " \
-            "from users left join events " \
-            "on users.id=events.fk_id_user where username=%s order by events.dia limit 5",[request.session["username"]])
+            cursor.execute("select users.name,users.icon,users.email,users.fav_city,users.username " \
+            "from users " \
+            "where username=%s",[request.session["username"]])
 
             user_obj=cursor.fetchall()
-            
+            cursor.execute("select events.nome,events.dia,events.color,types.icon from events join users on users.id=events.fk_id_user" \
+            " join types on events.fk_type=types.id where username =%s order by events.dia limit 5",[request.session["username"]])
+            event_obj=cursor.fetchall()
             #Verifica se o email da url é o da sessao,evita que o cara invada outros emails com o auth=true
             if(user_obj[0][2] == request.session['email']):
                 connection.close()
                 events=[]
-                for event in user_obj:
-                                #nome       #dia        #cor
-                 events.append([event[5],event[6],event[7]])
-                print(user_obj)
-                print(events)
+                
+                try:
+                    for event in event_obj:
+                                    #nome       #dia    #cor    #icone
+                     events.append([event[0],event[1],event[2],event[3]])
+                except IndexError:
+                     ...
+               
                 request.session["name"]=user_obj[0][0]
                 request.session["icon"]=user_obj[0][1]
                 request.session["fav_city"]=user_obj[0][3]

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style_dashboard.css' %}">
+    
     <link rel="stylesheet" href="{% static 'css/style_events.css' %}">
     <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
     <title>Dashboard</title>
@@ -59,7 +59,7 @@
     </div> 
 {% endif %}
 <body class="gradient">
-   
+    
     <div class="container">
         {% if not request.session.auth %}
 
@@ -98,94 +98,55 @@
 
 
     {%else%}
-    <div class="menu_div">
-
-        <div class="calendario_div">
-            <div style="display: flex;justify-content: center;">
-                
-                <p class="lucida calendario_p">Calendário de {{string_month}} de {{request.session.ano_atual}}</p>
+        <form class="form_events_form"action="">
+            <div style="display:flex;width: 100%;justify-content: center;">
+                <p class="title_form_p">Crie o seu evento!</p>
             </div>
-           
-            <table>
-                <tr>
-                    <th>DOM</th>
-                    <th>SEG</th>
-                    <th>TER</th>
-                    <th>QUA</th>
-                    <th>QUI</th>
-                    <th>SEX</th>
-                    <th>SAB</th>
-                    
-                </tr>
-                {% for day in calendar_range%}
-
-                    {% if forloop.first %}
-                        <tr>
-                    {% elif forloop.counter0 != 0 and forloop.counter0|divisibleby:7 %}
-                        </tr>
-                        <tr>
-                    {% endif %}
-
-                    {% if request.session.dia_atual == day and real_year == request.session.ano_atual and real_month == request.session.mes_atual %}
-                    
-
-                        <td class="lucida dia_atual_td">{{day}}</td>
-
-                    {% else %}
-
-                        <td class=" lucida dia_td">{{day}}</td>
-
-                    {% endif %}
-
-                    {% if forloop.last %}
-
-                        </tr>
-
-                    {% endif %}
-
-                {% endfor %}
-            </table>
-            <div style="width:100%;display:flex;flex-direction: row;">
-                 <a href="{% url 'clima:update_month_minus'%}"> <button class="botoes_calendario_buttons lucida">MÊS ANTERIOR</button></a>
-              
-               <a href="{% url 'clima:update_month_plus' %}"><button class="botoes_calendario_buttons lucida">PRÓXIMO MÊS</button></a>
+            <p class="text_input_p lucida">Nome:</p>
+            <input placeholder="Título do evento" type="text" name="name" id="name" class="info_input" required>
+            <p class="text_input_p lucida">Descrição</p>
+            <textarea placeholder="Descrição do evento"name="descr" id="descr" class="info_input" maxlength="255" rows="5" required></textarea>
+            <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;">
+                <p class="text_input_p lucida">Dia</p>
+                <input type="date" class="date_input" id="date_event" name="date_event" required>
+                <p class="text_input_p lucida">Hora</p>
+                <input type="time" name="hour_event" id="hour_event" class="date_input" required>
             </div>
-        </div>
-
-
-
-        <div class="submenu_div">
-            <div class="proximos_eventos_div">
-                <p class="lucida calendario_p">Próximos eventos:(finalizar depois)</p>
-                {% for event in events %}
-                    <div class="event_div {{event.3}}">  
-                         <img class="event_icon_img"src="{% static 'media/events_icons/' %}{{event.4}}">
-                         <p>{{event.0}} {{event.1}}</p>
-
+            
+            <p class="text_input_p lucida">Cor de visualização</p>
+                <select name="color" id="color" required>
+                    <option value="red">Vermelho</option>
+                    <option value="yellow">Amarelo</option>
+                    <option value="green">Verde</option>
+                    <option value="white">Branco</option>
+                    <option value="blue">Azul</option>
+                    
+                </select>
+                <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;">
+                    <p class="text_input_p lucida">Tipo (ícone)</p>
+                    <select name="select" id="select" class="select_input" required>
+                        <option value="birthday_icon.png" selected>Aniversário/Festa</option>
+                        <option value="book_icon.png">Estudar</option>
+                        <option value="child_icon.png">Cuidar de uma criança</option>
+                        <option value="cleaning_icon.png">Limpar algo</option>
+                        <option value="rest_icon.png">Descansar</option>
+                        <option value="shopping_icon.png">Fazer compras</option>
+                        <option value="sports_icon.png">Praticar algum esporte</option>
+                        <option value="trip_icon.png">Viajar</option>
+                        <option value="warning_icon.png">Compromisso importante</option>
+                    </select>
+                    <div style="background-color: white;border-radius:10px;padding:2px">
+                        <img id="icon" class="event_create_icon_img"src="{%static 'media/events_icons/birthday_icon.png'%}" alt="">
                     </div>
-                   
-                {% endfor %}
-            </div>
-            <div class="botoes_eventos_div">
-
-               <a href="{% url 'clima:create_event'%}"> <button class="botoes_eventos_buttons lucida">CRIAR EVENTO</button></a>
-              
-               <a href="{% url 'clima:update_month_plus' %}"><button class="botoes_eventos_buttons lucida">EDITAR EVENTO</button></a>
+                    
+                            
+               
 
 
-            </div>
-        </div>
-
-
-
-
-    </div>
-
-   
-        
-
-
-   
+                </div>
+                 <a style="width:400px;"> <button style="width:100%"class="botoes_header_buttons lucida">AVANÇAR</button></a>
+        </form>
+    {% endif %}
 
 
 
@@ -199,18 +160,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-    {% endif%}
-    </div>
-   
     <footer>
         <div class="footer">
              <div class="logo_nome_div">
@@ -232,4 +181,16 @@
 </body>
 
 </html>
-
+<script>
+    const selector=document.getElementById("select");
+    const icon=document.getElementById("icon");
+    //O django carrega esses statics lá em cima,antes do js ser carregado
+    //Portanto,ele carregará o path,mas deixará sem nada para nn dar erro
+    //Quando o usuário clicar e selecionar,aí sim ele juntará o base_path+
+    //url do icone.
+    const base_path="{% static 'media/events_icons/'%}";
+    selector.addEventListener('change',function(){
+        var value=selector.value;
+        icon.src=base_path+value;
+    });
+</script>
