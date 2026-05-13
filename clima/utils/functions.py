@@ -87,3 +87,24 @@ def mes_real():
 def ano_real():
     __obj=dt.date.today()
     return int(__obj.year)
+
+def retirar_id_lat_long(value:str):
+    flaglat=False
+    flaglong=False
+    lat=""
+    long=""
+    for char in value:
+        if(not flaglat and not flaglong):
+            id=char
+        if(flaglat and char !="/"):
+            lat+=char
+        if(char == ">"):
+            flaglat=True
+       
+        if (char == "/"):
+            flaglat=False
+            flaglong=True
+
+        if(flaglong and char !="/"):
+            flaglong=True
+    return int(id),int(lat),int(long)

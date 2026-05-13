@@ -88,16 +88,4 @@ select{
     height:100px;
     border-radius:100px;
 }
-.image_side_input{
 
-    width:40px;
-    height:30px;
-    border-radius: 5px;
-}
-.country_select{
-    border-radius: 10px;
-    width:95%;
-    height: auto;
-    padding: 5px;
-    font-size:12px;
-}

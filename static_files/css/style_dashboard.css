@@ -1,17 +1,5 @@
 @import url("./style_all.css");
-.container{
-    display:flex;
-    flex-direction: column;
-    gap:0px;
-    justify-content: space-evenly;
-    margin-top:115px;
-    width:100%;
-    left: 0;
-    right: 0;
-    padding: 0px;
-    align-items: center;
-    
-}
+
 .not_auth_div{
     left:0;
     top:0;

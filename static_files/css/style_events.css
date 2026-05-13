@@ -39,10 +39,10 @@ textarea{
 }
 .date_input{
     border-radius: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
+    
     cursor: pointer;
     font-size:12px;
+    padding: 8px;
 }
 .event_create_icon_img{
     width:50px;
@@ -51,12 +51,14 @@ textarea{
 }
 .select_input{
    border-radius: 10px;
-   padding-left: 5px;
-   padding-right: 5px;
+   padding:8px;
    font-size:12px;
    cursor: pointer;
 }
-
+.color_selector_div{
+    width:20px;
+    height:20px;
+}
 
 
 

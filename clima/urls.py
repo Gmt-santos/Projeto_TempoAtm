@@ -14,9 +14,10 @@ urlpatterns = [
     path('register/operation',views.register_operation,name="register_operation"),
 
     path('dashboard_clima/',views.dashboard_clima,name="dashboard_clima"),
-    path('dashboard_clima/month_plus',views.update_month_plus,name="update_month_plus"),
-    path('dashboard_clima/month_minus',views.update_month_minus,name="update_month_minus"),
-    path('dashboard_clima/create_event',views.create_event,name="create_event"),
+    path('dashboard_clima/month_plus/',views.update_month_plus,name="update_month_plus"),
+    path('dashboard_clima/month_minus/',views.update_month_minus,name="update_month_minus"),
+    path('dashboard_clima/create_event/',views.create_event,name="create_event"),
+    path('dashboard_clima/create_event/climate_query',views.climate_query,name="climate_query"),
   
     path('update/operation',views.update_operation,name="update_operation"),
     path('dashboard_clima/perfil/',views.perfil,name="perfil")

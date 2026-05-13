@@ -20,6 +20,19 @@ footer{
     bottom:0;
     width:100%;
 }
+.container{
+    display:flex;
+    flex-direction: column;
+    gap:0px;
+    justify-content: space-evenly;
+    margin-top:115px;
+    width:100%;
+    left: 0;
+    right: 0;
+    padding: 0px;
+    align-items: center;
+    
+}
 .gradient{
     /* background-image:url("../media/images/background.png"); */
     background-color:var(--primary-color-blue);
@@ -168,3 +181,17 @@ footer{
     width: 20%;
     gap:10px;
 }   
+/* Bandeira dos países */
+.image_side_input{
+
+    width:40px;
+    height:30px;
+    border-radius: 5px;
+}
+.country_select{
+    border-radius: 10px;
+    width:95%;
+    height: auto;
+    padding: 5px;
+    font-size:12px;
+}

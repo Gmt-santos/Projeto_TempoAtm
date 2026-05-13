@@ -98,53 +98,85 @@
 
 
     {%else%}
-        <form class="form_events_form"action="">
-            <div style="display:flex;width: 100%;justify-content: center;">
+        <form class="form_events_form"action="{% url "clima:climate_query" %}" method="POST">
+
+            <div style="display:flex;width: 100%;justify-content: center    ;">
                 <p class="title_form_p">Crie o seu evento!</p>
             </div>
+
             <p class="text_input_p lucida">Nome:</p>
+
             <input placeholder="Título do evento" type="text" name="name" id="name" class="info_input" required>
+
             <p class="text_input_p lucida">Descrição</p>
+
             <textarea placeholder="Descrição do evento"name="descr" id="descr" class="info_input" maxlength="255" rows="5" required></textarea>
-            <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;">
+
+            <p class="text_input_p lucida">Cidade</p>
+            <div style="display: flex;flex-direction: row;width:100%;gap:5px;">
+                            {% for city in cities  %}
+                                {% if city.0 == request.session.fav_city %}
+                                    <img id="country_icon"class="image_side_input"src="/static/media/country_icons/{{city.2}}_icon.webp" alt="">
+                                {% endif %}
+                            {%endfor%}
+                            
+                            <select class="lucida country_select" name="country" id="country" required>
+                                {% for city in cities  %}
+                                    {% if city.0 == request.session.fav_city %}
+                                        <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}} >{{city.4}}/{{city.5}}" selected >{{city.1}}-{{city.2}}</option>
+                                    {%else%}
+                                        <option data-icon="/static/media/country_icons/{{city.2|lower}}_icon.webp"value="{{city.0}} >{{city.4}}/{{city.5}}" >{{city.1}}-{{city.2}}</option>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </select>
+            </div>
+
+
+
+
+            <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;align-items: center;">
                 <p class="text_input_p lucida">Dia</p>
                 <input type="date" class="date_input" id="date_event" name="date_event" required>
                 <p class="text_input_p lucida">Hora</p>
                 <input type="time" name="hour_event" id="hour_event" class="date_input" required>
             </div>
             
-            <p class="text_input_p lucida">Cor de visualização</p>
-                <select name="color" id="color" required>
-                    <option value="red">Vermelho</option>
-                    <option value="yellow">Amarelo</option>
-                    <option value="green">Verde</option>
-                    <option value="white">Branco</option>
-                    <option value="blue">Azul</option>
-                    
+            <div style="display: flex;flex-direction:row;justify-content:space-around;width: 100%;align-items: center;">
+                <p class="text_input_p lucida">Cor de visualização</p>
+                <select name="color" id="color" class="select_input" required >
+                        <option value="red">Vermelho</option>
+                        <option value="yellow">Amarelo</option>
+                        <option value="green">Verde</option>
+                        <option value="white">Branco</option>
+                        <option value="blue">Azul</option>
                 </select>
-                <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;">
-                    <p class="text_input_p lucida">Tipo (ícone)</p>
-                    <select name="select" id="select" class="select_input" required>
-                        <option value="birthday_icon.png" selected>Aniversário/Festa</option>
-                        <option value="book_icon.png">Estudar</option>
-                        <option value="child_icon.png">Cuidar de uma criança</option>
-                        <option value="cleaning_icon.png">Limpar algo</option>
-                        <option value="rest_icon.png">Descansar</option>
-                        <option value="shopping_icon.png">Fazer compras</option>
-                        <option value="sports_icon.png">Praticar algum esporte</option>
-                        <option value="trip_icon.png">Viajar</option>
-                        <option value="warning_icon.png">Compromisso importante</option>
-                    </select>
-                    <div style="background-color: white;border-radius:10px;padding:2px">
-                        <img id="icon" class="event_create_icon_img"src="{%static 'media/events_icons/birthday_icon.png'%}" alt="">
-                    </div>
+                <div class="color_selector_div "></div>
+            </div>
+            <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;align-items: center;">
+                <p class="text_input_p lucida">Tipo (ícone)</p>
+                <select name="select" id="select" class="select_input" required>
+                    <option value="birthday_icon.png" selected>Aniversário/Festa</option>
+                    <option value="book_icon.png">Estudar</option>
+                    <option value="child_icon.png">Cuidar de uma criança</option>
+                    <option value="cleaning_icon.png">Limpar algo</option>
+                    <option value="rest_icon.png">Descansar</option>
+                    <option value="shopping_icon.png">Fazer compras</option>
+                    <option value="sports_icon.png">Praticar algum esporte</option>
+                    <option value="trip_icon.png">Viajar</option>
+                    <option value="warning_icon.png">Compromisso importante</option>
+                </select>
+                <div style="background-color: white;border-radius:10px;padding:2px">
+                    <img id="icon" class="event_create_icon_img"src="{%static 'media/events_icons/birthday_icon.png'%}" alt="">
+                </div>
                     
                             
                
 
-
+                
                 </div>
-                 <a style="width:400px;"> <button style="width:100%"class="botoes_header_buttons lucida">AVANÇAR</button></a>
+                <input type="submit" style="width: 100%;"value="Avançar" class="botoes_header_buttons lucida">
+                
         </form>
     {% endif %}
 
@@ -193,4 +225,17 @@
         var value=selector.value;
         icon.src=base_path+value;
     });
+
+    const selector_country = document.getElementById("country");
+    const image = document.getElementById("country_icon");
+
+    selector_country.addEventListener("change", function(){
+
+        const option =
+            selector_country.options[selector_country.selectedIndex];
+
+             image.src = option.dataset.icon;
+
+    });
+    
 </script>
