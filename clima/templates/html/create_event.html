@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,7 +99,7 @@
 
     {%else%}
         <form class="form_events_form"action="{% url "clima:climate_query" %}" method="POST">
-
+            {% csrf_token %}
             <div style="display:flex;width: 100%;justify-content: center    ;">
                 <p class="title_form_p">Crie o seu evento!</p>
             </div>

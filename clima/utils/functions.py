@@ -89,22 +89,20 @@ def ano_real():
     return int(__obj.year)
 
 def retirar_id_lat_long(value:str):
+    id=value[0]
+    value=value.replace(",",".")
     flaglat=False
     flaglong=False
     lat=""
     long=""
     for char in value:
-        if(not flaglat and not flaglong):
-            id=char
-        if(flaglat and char !="/"):
-            lat+=char
         if(char == ">"):
             flaglat=True
-       
-        if (char == "/"):
+        if(char!=">" and flaglat==True and char !="/"):
+            lat+=char
+        if(char=="/"):
             flaglat=False
             flaglong=True
-
-        if(flaglong and char !="/"):
-            flaglong=True
-    return int(id),int(lat),int(long)
+        if(char!="/" and flaglong==True):
+            long+=char
+    return int(id),float(lat),float(long)
