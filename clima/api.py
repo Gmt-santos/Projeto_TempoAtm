@@ -20,14 +20,15 @@ def get_data(request,lat,long):
     responses=openmeteo.weather_api(url,params=params)
     response=responses[0]
     hourly = response.Hourly()
-    hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
-    hourly_relative_humidity_2m = hourly.Variables(1).ValuesAsNumpy()
-    hourly_apparent_temperature = hourly.Variables(2).ValuesAsNumpy()
-    hourly_precipitation_probability = hourly.Variables(3).ValuesAsNumpy()
-    hourly_rain = hourly.Variables(4).ValuesAsNumpy()
-    hourly_cloud_cover = hourly.Variables(5).ValuesAsNumpy()
-    hourly_wind_speed_10m = hourly.Variables(6).ValuesAsNumpy()
+    # hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
+    # hourly_relative_humidity_2m = hourly.Variables(1).ValuesAsNumpy()
+    # hourly_apparent_temperature = hourly.Variables(2).ValuesAsNumpy()
+    # hourly_precipitation_probability = hourly.Variables(3).ValuesAsNumpy()
+    # hourly_rain = hourly.Variables(4).ValuesAsNumpy()
+    # hourly_cloud_cover = hourly.Variables(5).ValuesAsNumpy()
+    # hourly_wind_speed_10m = hourly.Variables(6).ValuesAsNumpy()
     list_variables=[hourly.Variables(0).ValuesAsNumpy(),hourly.Variables(1).ValuesAsNumpy(),hourly.Variables(2).ValuesAsNumpy(),
                     hourly.Variables(3).ValuesAsNumpy(),hourly.Variables(4).ValuesAsNumpy(),hourly.Variables(5).ValuesAsNumpy(),
                     hourly.Variables(6).ValuesAsNumpy()]
+    
     return list_variables

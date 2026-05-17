@@ -106,3 +106,86 @@ def retirar_id_lat_long(value:str):
         if(char!="/" and flaglong==True):
             long+=char
     return int(id),float(lat),float(long)
+
+def hora_evento(request):
+    hora_evento=request.POST.get("hour_event")
+    counter=0
+    string_hora=hora_evento[0]+hora_evento[1]
+    int_hora=int(string_hora)
+    if(int_hora==0):
+        intervalo_horas=[int_hora,int_hora+1,int_hora+2]
+    elif(int_hora ==23):
+        intervalo_horas=[int_hora-2,int_hora-1,int_hora]
+    else:
+         intervalo_horas=[int_hora-1,int_hora,int_hora+1]
+    return intervalo_horas
+
+def avaliacao_condicao_climatica(city_info,intervalo):
+    '''
+    Retorna uma lista contendo características da condição climática
+    '''
+    '''
+    cityinfo
+    [0]->Temperatura
+    [1]->Umidade relativa
+    [2]->Temperatura aparente
+    [3]->Probabilidade de chuva
+    [4]->Chuva
+    [5]->Cobertura por nuvens
+    [6]->Velocidade do vento
+    
+    '''
+    city_info_inter=[]
+    for register in city_info:
+        city_info_inter.append([register[intervalo[0]],register[intervalo[1]],register[intervalo[2]]])
+    i=0
+    '''
+    if temperatura0 and umidade1 and temperatura_aparente2 and probabilidade_de_chuva3 and chuva4 and cobertura_por_nuvens5
+    '''
+    while i<=2:
+        
+        #Dia ensolarado
+       
+        if (city_info_inter[0][i]>=25 and city_info_inter[0][i]<=35)and(city_info_inter[1][i]<30)\
+            and city_info_inter[2][i]<=(city_info_inter[0][i]*1.2)and city_info_inter[3][i]<10\
+            and city_info_inter[4][i]<2 and city_info_inter[5][i]<=15  :
+            return ["light_green","sunny","Dia ensolarado","Vá na praia, mas passe protetor solar!!!"]
+        
+        #Mormaço
+       
+        elif (city_info_inter[0][i]>=25 and city_info_inter[0][i]<=30)and(city_info_inter[1][i]>70 and city_info_inter[1][i]<90)\
+            and city_info_inter[2][i]>(city_info_inter[0][i])and (city_info_inter[3][i]>=20 and city_info_inter[3][i]<=40)\
+            and city_info_inter[4][i]<2 and city_info_inter[5][i]>=80:
+              return ["rain","cloudy","Mormaço","Cuidado redobrado com a pele, passe protetor solar!!!"]
+                                                                                                         
+       
+       #Abafado
+        
+        elif (city_info_inter[0][i]>=30)and(city_info_inter[1][i]>65)\
+            and city_info_inter[2][i]>(city_info_inter[0][i])and (city_info_inter[3][i]>60 and city_info_inter[3][i]<80)\
+            and city_info_inter[4][i]<5 and city_info_inter[5][i]>=60 :
+              return ["blue","sunny","Dia abafado","Quente e sem chuva, mas pode chover a qualquer momento!!!"]
+        
+        #Dia frio e chuvoso
+       
+        elif (city_info_inter[0][i]>=10 and city_info_inter[0][i]<=20)and(city_info_inter[1][i]>=90)\
+            and city_info_inter[2][i]<(city_info_inter[0][i])and city_info_inter[3][i]>=90\
+            and city_info_inter[4][i]>=5 and city_info_inter[5][i]>=90   :
+              return ["rain","rain","Dia frio e chuvoso","Caso vá sair, leve um agasalho e um guarda-chuva!!!"]
+        
+        #Nevoeiro
+        
+        elif (city_info_inter[0][i]>=10 and city_info_inter[0][i]<=20)and(city_info_inter[1][i]>=90)\
+            and city_info_inter[2][i]<=(city_info_inter[0][i])and city_info_inter[3][i]<20\
+            and city_info_inter[4][i]<5 and city_info_inter[5][i]>=90  :
+              return ["rain","cloudy","Nevoeiro","Se for dirigir, vá devagar e com atenção!!!"]
+       
+        #Dia Nublado
+       
+        elif (city_info_inter[0][i]>=18 and city_info_inter[0][i]<=25)and(city_info_inter[1][i]>=60 and city_info_inter[1][i]<=80)\
+            and city_info_inter[2][i]<=(city_info_inter[0][i])and (city_info_inter[3][i]>=20 and city_info_inter[3][i]<=40)\
+            and city_info_inter[4][i]<2 and city_info_inter[5][i]>=80  :
+              return ["rain","cloudy","Dia nublado","Caso vá sair, leve um agasalho e um guarda-chuva!!!"]
+        
+        i+=1
+        

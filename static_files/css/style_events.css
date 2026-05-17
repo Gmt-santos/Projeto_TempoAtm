@@ -4,7 +4,7 @@ textarea{
 }
 .form_events_form{
     background-color:var(--secondary-color-rain);
-    width:400px;
+    width:350px;
     height:fit-content;
     padding: 20px;
     border-radius:20px;
@@ -59,9 +59,51 @@ textarea{
     width:20px;
     height:20px;
 }
-
-
-
+.org_dual_div{
+    display:flex;
+    flex-direction:row;
+    gap:50px;
+    width:800px;
+    height: fit-content;
+}
+.climate_query_div{
+    /* Background color depende do tempo*/
+    width:350px;
+    height:fit-content;
+    padding: 20px;
+    border-radius:20px;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 110px;
+    margin-bottom: 110px;
+    gap:10px;
+}
+.forecast_null_div{
+   background-color:var(--secondary-color-rain);
+    width:350px;
+    height:fit-content;
+    padding: 20px;
+    border-radius:20px;
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 110px;
+    margin-bottom: 110px;
+    gap:10px;
+}
+.forecast_null_h_p{
+   width: 100%;
+   height: fit-content;
+   font-size: 23px;
+   color:white;
+}
+.forecast_null_explanation_p{
+   width: 100%;
+   height: fit-content;
+   font-size: 15px;
+   color:white;
+}
 /* Parte do Dashboard*/
 
 

@@ -4,6 +4,9 @@
 *.pyc
 __pycache__
 db.sqlite3
+.cache.sqlite
+.cache/
+*.sqlite3
 media
 static
 app_clima/local_settings

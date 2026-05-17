@@ -1,0 +1,237 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/style_events.css' %}">
+    <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
+    <title>Dashboard</title>
+</head>
+{% if not request.session.auth%}
+
+<div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login'%}"> <button class="botoes_header_buttons lucida">LOGIN</button></a>
+              
+               <a href="{% url 'clima:register' %}"><button class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% else %}
+    <div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+              <div class="botoes_header_div">
+
+                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
+              
+            </div>
+            <div class="header_hello_div">
+                <img src="{% static 'media/icons_user/'%}{{request.session.icon}}" alt="" class="icon_user_img">
+                <p class="hello_user_p lucida">Olá {{request.session.name}} !!!</p>
+
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons lucida">LOGOUT</button></a>
+              
+              
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% endif %}
+<body class="gradient">
+    
+    <div class="container">
+        {% if not request.session.auth %}
+
+
+        
+            <div class="not_auth_div">
+            
+
+                    <div class="info_not_auth_div">
+                        <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                            <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
+
+                            <p class="title_not_auth_p lucida">
+                                Você não está logado!
+                            </p>
+                            
+                        </div>
+                        <div style="display:flex;flex-direction: column;align-items: center;gap:10px">
+
+                        <p class="lucida texto_auxiliar_botoes_p">Faça o login caso já tenha conta</p>
+                        <a style="width: 100%;" href="{% url 'clima:login'%}"> <button  style="width: 100%;" class="botoes_header_buttons lucida">LOGIN</button></a>
+                        <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
+                        <a style="width: 100%;" href="{% url 'clima:register' %}"><button style="width: 100%;"class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+
+
+
+
+
+                        </div>
+                        
+                       
+                    </div>
+                        
+            </div>
+
+
+    {%else%}
+    <div class="org_dual_div">
+        <form class="form_events_form"action="{% url 'clima:climate_query' %}" method="POST">
+            {% csrf_token %}
+            <div style="display:flex;width: 100%;justify-content: center;">
+                <p class="title_form_p">Crie o seu evento!</p>
+            </div>
+
+            <p class="text_input_p lucida">Nome:</p>
+
+            <input  type="text" name="name" id="name" class="info_input" required readonly value="{{name}}">
+
+            <p class="text_input_p lucida">Descrição</p>
+
+            <textarea value="{{descr}}"name="descr" id="descr" class="info_input" maxlength="255" rows="5" required readonly>{{descr}}</textarea>
+
+            
+            <input type="hidden" value="{{id_city}}" id="id_city"name="id_city">
+
+
+
+
+            <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;align-items: center;">
+                <p class="text_input_p lucida">Dia</p>
+                <input type="date" class="date_input" id="date_event" name="date_event" value="{{date_event}}" required>
+                <p class="text_input_p lucida">Hora</p>
+                <input type="time" name="hour_event" id="hour_event" class="date_input" value="{{hour_event}}"required>
+            </div>
+            
+            <input type="hidden" name="color" id="color" value="{{color}}">
+            <input type="hidden" name="select" id="select" value="{{icon}}">
+            <input type="submit" style="width: 100%;"value="Criar" class="botoes_header_buttons lucida">
+                
+        </form>
+
+
+        <!-- CLIMATE INFO QUERY DIVS -->
+        {% if forecast_null%}
+        <div class="forecast_null_div">
+            <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                <div class="icon_circle_div">
+
+                        <img class="icon_calendar_img" src="{% static 'media/icons/sad_face_icon.png'%}" alt="">
+
+                </div>
+
+                <p class="lucida forecast_null_h_p">Condição climática indisponível! </p>
+
+            </div>
+            <p class="lucida forecast_null_explanation_p">Devido a prezarmos pela precisão do modelo climático da OpenMeteo, nosso sistema atende até, no máximo,
+                uma semana de condições climáticas a partir do dia de hoje.O dia que escolheu está fora desse intervalo.
+            </p>
+             <p class="lucida forecast_null_explanation_p">Apesar disso, quando você estiver a uma semana do evento que está criando, 
+                confira nosso sistema para verificar a condição climática
+            </p>
+            <p class="lucida forecast_null_explanation_p">Clique em "Criar" para criar seu evento</p>
+        </div>
+        {% else %}
+        <div class="climate_query_div">
+            
+            {% comment %} <p>Temperatura</p>
+            {% for value in city_info.0 %}
+                {% if forloop.counter0 in intervalo_horas %}
+                {{value}}
+            {% endif %}
+            
+            {% endfor %} {% endcomment %}
+
+
+
+
+        </div>
+        {% endif %}
+        <!--  END CLIMATE INFO QUERY DIVS -->
+
+    </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <footer>
+        <div class="footer">
+             <div class="logo_nome_div">
+                <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+                 <p class="logo_footer_p lucida" >MatWeather</p>
+            </div>
+            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">Projeto educacional realizado por Gmt-santos</a>
+            <p class ="footer_credit_p lucida">--Todos os direitos reservados 2026--</p>
+            <div style="display:flex;flex-direction: row;gap: 10px;">
+                <a  class ="footer_credit_a lucida" target= "_blank" href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+                <a  class ="footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos">GitHub</a>
+                
+                
+
+            </div>
+        </div>
+
+</footer>
+</body>
+
+</html>
+<script>
+    const selector=document.getElementById("select");
+    const icon=document.getElementById("icon");
+    //O django carrega esses statics lá em cima,antes do js ser carregado
+    //Portanto,ele carregará o path,mas deixará sem nada para nn dar erro
+    //Quando o usuário clicar e selecionar,aí sim ele juntará o base_path+
+    //url do icone.
+    const base_path="{% static 'media/events_icons/'%}";
+    selector.addEventListener('change',function(){
+        var value=selector.value;
+        icon.src=base_path+value;
+    });
+
+    const selector_country = document.getElementById("country");
+    const image = document.getElementById("country_icon");
+
+    selector_country.addEventListener("change", function(){
+
+        const option =
+            selector_country.options[selector_country.selectedIndex];
+
+             image.src = option.dataset.icon;
+
+    });
+    
+</script>
