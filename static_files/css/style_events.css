@@ -104,6 +104,63 @@ textarea{
    font-size: 15px;
    color:white;
 }
+.climate_query_h_p{
+   width: 100%;
+   height: fit-content;
+   font-size: 23px;
+   color:white;
+}
+.climate_query_descr_p{
+   width: 100%;
+   height: fit-content;
+   font-size: 15px;
+   color:white;
+}
+.icon_circle_events_div{
+    width:32px;
+    height: 32px;
+    border-radius: 30px;
+    border-width: 2px;
+    border-color:var(--primary-color-green);
+    border-style:solid;
+    background-color: var(--secondary-color-rain);
+    padding: 5px;
+}
+.icon_info_climate_query_img{
+    width:30px;
+    height:30px;
+}
+.numbers_info_p{
+    color:white;
+    font-size: 12px;
+}
+/* Cores eventos/climas*/
+.red-e{
+    background-color: darkred;
+}
+.yellow-e{
+    background-color: goldenrod;
+}
+.green-e{
+    background-color: var(--primary-color-green);
+}
+.gray-e{
+    background-color:rgb(151, 151, 151);
+}
+.blue-e{
+    background-color:var(--primary-color-blue);
+}
+.light_green-c{
+    background-color:var(--secondary-color-lightgreen);
+
+}
+.rain-c{
+    background-color:var(--secondary-color-rain);
+}
+.blue-c{
+    background-color: var(--primary-color-blue);
+}
+
 /* Parte do Dashboard*/
 
 
@@ -120,8 +177,13 @@ textarea{
     border-width: 1px;
     justify-content: center;
     border-color:var(--secondary-color-lightgreen);
+    gap:10px;
 }
 .event_icon_img{
     width:40px;
     height: 40px;
+}
+.event_title_dashboard_p{
+    color:white;
+    font-size: 15px;
 }

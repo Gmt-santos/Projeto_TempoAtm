@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/style_events.css' %}">
+    <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
+    <title>Dashboard</title>
+</head>
+{% if not request.session.auth%}
+
+<div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login'%}"> <button class="botoes_header_buttons lucida">LOGIN</button></a>
+              
+               <a href="{% url 'clima:register' %}"><button class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% else %}
+    <div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+              <div class="botoes_header_div">
+
+                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
+              
+            </div>
+            <div class="header_hello_div">
+                <img src="{% static 'media/icons_user/'%}{{request.session.icon}}" alt="" class="icon_user_img">
+                <p class="hello_user_p lucida">Olá {{request.session.name}} !!!</p>
+
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons lucida">LOGOUT</button></a>
+              
+              
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% endif %}
+<body class="gradient">
+    <div class="container">
+        {% if not request.session.auth %}
+
+
+        
+            <div class="not_auth_div">
+            
+
+                    <div class="info_not_auth_div">
+                        <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                            <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
+
+                            <p class="title_not_auth_p lucida">
+                                Você não está logado!
+                            </p>
+                            
+                        </div>
+                        <div style="display:flex;flex-direction: column;align-items: center;gap:10px">
+
+                        <p class="lucida texto_auxiliar_botoes_p">Faça o login caso já tenha conta</p>
+                        <a style="width: 100%;" href="{% url 'clima:login'%}"> <button  style="width: 100%;" class="botoes_header_buttons lucida">LOGIN</button></a>
+                        <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
+                        <a style="width: 100%;" href="{% url 'clima:register' %}"><button style="width: 100%;"class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+
+
+
+
+
+                        </div>
+                        
+                       
+                    </div>
+                        
+            </div>
+    {%else%}
+    <form style="background-color:initial;"class="form_events_form"action="{% url 'clima:index' %}" method="POST">
+            {% csrf_token %}
+            <div style="display:flex;width: 100%;justify-content: center;">
+                <p class="title_form_p">Pesquise seu evento!</p>
+                <input placeholder="Título do evento" type="text" name="name" id="name" class="info_input" required>
+            </div>
+                <input type="submit" style="width: 100%;"value="Avançar" class="botoes_header_buttons lucida">
+                
+        </form>
+
+    {%endif%}
+    </div>
+    
+</body>
+</html>

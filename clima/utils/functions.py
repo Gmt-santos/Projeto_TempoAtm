@@ -149,14 +149,14 @@ def avaliacao_condicao_climatica(city_info,intervalo):
         if (city_info_inter[0][i]>=25 and city_info_inter[0][i]<=35)and(city_info_inter[1][i]<30)\
             and city_info_inter[2][i]<=(city_info_inter[0][i]*1.2)and city_info_inter[3][i]<10\
             and city_info_inter[4][i]<2 and city_info_inter[5][i]<=15  :
-            return ["light_green","sunny","Dia ensolarado","Vá na praia, mas passe protetor solar!!!"]
+            return ["light_green-c","sunny","Dia ensolarado","Vá na praia, mas passe protetor solar!!!"]
         
         #Mormaço
        
         elif (city_info_inter[0][i]>=25 and city_info_inter[0][i]<=30)and(city_info_inter[1][i]>70 and city_info_inter[1][i]<90)\
             and city_info_inter[2][i]>(city_info_inter[0][i])and (city_info_inter[3][i]>=20 and city_info_inter[3][i]<=40)\
             and city_info_inter[4][i]<2 and city_info_inter[5][i]>=80:
-              return ["rain","cloudy","Mormaço","Cuidado redobrado com a pele, passe protetor solar!!!"]
+              return ["rain-c","cloudy","Mormaço","Cuidado redobrado com a pele, passe protetor solar!!!"]
                                                                                                          
        
        #Abafado
@@ -164,28 +164,50 @@ def avaliacao_condicao_climatica(city_info,intervalo):
         elif (city_info_inter[0][i]>=30)and(city_info_inter[1][i]>65)\
             and city_info_inter[2][i]>(city_info_inter[0][i])and (city_info_inter[3][i]>60 and city_info_inter[3][i]<80)\
             and city_info_inter[4][i]<5 and city_info_inter[5][i]>=60 :
-              return ["blue","sunny","Dia abafado","Quente e sem chuva, mas pode chover a qualquer momento!!!"]
+              return ["blue-c","sunny","Dia abafado","Quente e sem chuva, mas pode chover a qualquer momento!!!"]
         
         #Dia frio e chuvoso
        
         elif (city_info_inter[0][i]>=10 and city_info_inter[0][i]<=20)and(city_info_inter[1][i]>=90)\
             and city_info_inter[2][i]<(city_info_inter[0][i])and city_info_inter[3][i]>=90\
             and city_info_inter[4][i]>=5 and city_info_inter[5][i]>=90   :
-              return ["rain","rain","Dia frio e chuvoso","Caso vá sair, leve um agasalho e um guarda-chuva!!!"]
+              return ["rain-c","rain","Dia frio e chuvoso","Caso vá sair, leve um agasalho e um guarda-chuva!!!"]
         
         #Nevoeiro
         
         elif (city_info_inter[0][i]>=10 and city_info_inter[0][i]<=20)and(city_info_inter[1][i]>=90)\
             and city_info_inter[2][i]<=(city_info_inter[0][i])and city_info_inter[3][i]<20\
             and city_info_inter[4][i]<5 and city_info_inter[5][i]>=90  :
-              return ["rain","cloudy","Nevoeiro","Se for dirigir, vá devagar e com atenção!!!"]
+              return ["rain-c","cloudy","Nevoeiro","Se for dirigir, vá devagar e com atenção!!!"]
        
         #Dia Nublado
        
         elif (city_info_inter[0][i]>=18 and city_info_inter[0][i]<=25)and(city_info_inter[1][i]>=60 and city_info_inter[1][i]<=80)\
             and city_info_inter[2][i]<=(city_info_inter[0][i])and (city_info_inter[3][i]>=20 and city_info_inter[3][i]<=40)\
             and city_info_inter[4][i]<2 and city_info_inter[5][i]>=80  :
-              return ["rain","cloudy","Dia nublado","Caso vá sair, leve um agasalho e um guarda-chuva!!!"]
+              return ["rain-c","cloudy","Dia nublado","Caso vá sair, leve um agasalho e um guarda-chuva!!!"]
+        else:
+            '''
+            Parte mais simplificada, caso as condições anteriores não forem atendidas
+            '''
+            if(city_info_inter[0][i]>30 and city_info_inter[3][i]<10 and city_info_inter[4][i]<2 ):
+              return ["light_green-c","sunny","Dia Quente e ensolarado","Aproveite o Sol, mas passe protetor solar!!!"]
+            elif (city_info_inter[3][i]>80 and city_info_inter[4][i]>80 and city_info_inter[5][i]>80):
+              return ["rain-c","rain","Dia de Chuva","Caso vá sair,leve um guarda-chuva!!!"]
+            elif (city_info_inter[3][i]>40 and city_info_inter[4][i]>40 and city_info_inter[5][i]>40):
+              return ["blue-c","cloudy","Dia nublado, com chance de chuva ","Caso vá sair,leve um guarda-chuva!!!"]
+            elif(city_info_inter[0][i]<25 and city_info_inter[2][i]<25):
+              return ["rain-c","cold","Dia frio","Caso vá sair, leve um agasalho!!!"]
+        i+=1    
+
+        '''
+        cityinfo
+        [0]->Temperatura
+        [1]->Umidade relativa
+        [2]->Temperatura aparente
+        [3]->Probabilidade de chuva
+        [4]->Chuva
+        [5]->Cobertura por nuvens
+        [6]->Velocidade do vento
         
-        i+=1
-        
+        '''

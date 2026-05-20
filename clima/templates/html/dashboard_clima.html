@@ -158,9 +158,9 @@
             <div class="proximos_eventos_div">
                 <p class="lucida calendario_p">Próximos eventos:(finalizar depois)</p>
                 {% for event in events %}
-                    <div class="event_div {{event.3}}">  
-                         <img class="event_icon_img"src="{% static 'media/events_icons/' %}{{event.4}}">
-                         <p>{{event.0}} {{event.1}}</p>
+                    <div class="event_div {{event.2}}">  
+                         <img class="event_icon_img"src="{% static 'media/events_icons/' %}{{event.3}}">
+                         <p class="lucida event_title_dashboard_p">{{event.0}} --> {{event.1}}</p>
 
                     </div>
                    
@@ -170,7 +170,7 @@
 
                <a href="{% url 'clima:create_event'%}"> <button class="botoes_eventos_buttons lucida">CRIAR EVENTO</button></a>
               
-               <a href="{% url 'clima:update_month_plus' %}"><button class="botoes_eventos_buttons lucida">EDITAR EVENTO</button></a>
+               <a href="{% url 'clima:query_event' %}"><button class="botoes_eventos_buttons lucida">EDITAR EVENTO</button></a>
 
 
             </div>

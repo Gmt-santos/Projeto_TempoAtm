@@ -80,6 +80,13 @@ def climate_query(request):
                     [6]->Velocidade do vento
                     
                     '''
+                    '''
+                    condiçao climatica
+                    [0]-> cor
+                    [1]-> icone
+                    [2]-> Titulo
+                    [3]-> Descriçao
+                    '''
                     context={
                     "name":request.POST.get("name"),
                     "descr":request.POST.get("descr"),
@@ -100,3 +107,54 @@ def climate_query(request):
         return redirect("clima:dashboard_clima")
     except KeyError:
         return redirect("clima:dashboard_clima")
+    
+
+def insert_event(request):
+    if(request.method == "POST"):
+        load_dotenv()
+        HOST=os.getenv("HOST")
+        USER=os.getenv("USER")
+        PASSWORD=os.getenv("PASSWORD")
+        DATABASE=os.getenv("DATABASE")
+        port=5432
+        
+        name=request.POST.get("name")
+        descr=request.POST.get("descr")
+        date_event=request.POST.get("date_event")
+        hour_event=request.POST.get("hour_event")
+        color=request.POST.get("color")
+        icon=request.POST.get("select")
+        id_city=request.POST.get("id_city")
+        try:
+            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+            cursor=connection.cursor()
+            cursor.execute("select id from types where icon =%s",[icon,])
+            icon_id=cursor.fetchone()[0]
+            cursor.execute("insert into events(nome,descr,dia,hora,color,fk_type,fk_id_user,fk_city)values(" \
+            "%s,%s,%s,%s,%s,%s,%s,%s);",[name,descr,date_event,hour_event,color,icon_id,request.session["id_user"],id_city])
+            connection.commit()
+            connection.close()
+            return redirect("clima:dashboard_clima")
+        except psycopg2.OperationalError:
+            return redirect("clima:dashboard_clima")
+        except KeyError:
+            return redirect("clima:dashboard_clima")
+    else:
+        redirect("clima:dashboard_clima")
+
+def query_event(request):
+    if(request.session.get("email")):
+        return render(request,"html/query_event.html")
+    else:
+        return redirect("clima:index")
+def form_event(request):
+    if(request.method == "POST" and request.session.get("email")):
+        load_dotenv()
+        HOST=os.getenv("HOST")
+        USER=os.getenv("USER")
+        PASSWORD=os.getenv("PASSWORD")
+        DATABASE=os.getenv("DATABASE")
+        port=5432
+        connection=psycopg2.connect(host=HOST,password=PASSWORD,database=DATABASE,port=port)
+        cursor=connection.cursor()
+        cursor.execute("select * from events where events.id=%s union select * from types union select* from cities")

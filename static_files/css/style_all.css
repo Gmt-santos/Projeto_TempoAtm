@@ -141,7 +141,7 @@ footer{
     border-color:var(--primary-color-green);
     border-style:solid;
     padding: 5px;
-    background-color:var(  --secondary-color-rain);
+  
 }
 .footer{
     display:flex;

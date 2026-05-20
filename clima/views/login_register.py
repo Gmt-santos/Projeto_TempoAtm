@@ -47,7 +47,7 @@ def login_enter(request):
             
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
-            cursor.execute("select users.name,users.password,users.icon,users.email,cities.name,username from users join " \
+            cursor.execute("select users.name,users.password,users.icon,users.email,cities.name,username,users.id from users join " \
             "cities on users.fav_city=cities.id where users.email=%s",[_email])
             user_obj=cursor.fetchall()
             connection.close()
@@ -69,6 +69,7 @@ def login_enter(request):
                 request.session["icon"]=user_obj[0][2]
                 request.session["fav_city"]=user_obj[0][4]
                 request.session["username"]=user_obj[0][5]
+                request.session['id_user']=user_obj[0][6]
                 hoje=datetime.date.today()
                 mes_atual=hoje.month
                 ano_atual=hoje.year

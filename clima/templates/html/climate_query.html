@@ -99,7 +99,7 @@
 
     {%else%}
     <div class="org_dual_div">
-        <form class="form_events_form"action="{% url 'clima:climate_query' %}" method="POST">
+        <form class="form_events_form"action="{% url 'clima:insert_event' %}" method="POST">
             {% csrf_token %}
             <div style="display:flex;width: 100%;justify-content: center;">
                 <p class="title_form_p">Crie o seu evento!</p>
@@ -114,20 +114,20 @@
             <textarea value="{{descr}}"name="descr" id="descr" class="info_input" maxlength="255" rows="5" required readonly>{{descr}}</textarea>
 
             
-            <input type="hidden" value="{{id_city}}" id="id_city"name="id_city">
+            <input type="hidden" value="{{id_city}}" id="id_city"name="id_city" readonly>
 
 
 
 
             <div style="display: flex;flex-direction:row;justify-content:space-evenly;width: 100%;align-items: center;">
                 <p class="text_input_p lucida">Dia</p>
-                <input type="date" class="date_input" id="date_event" name="date_event" value="{{date_event}}" required>
+                <input type="date" class="date_input" id="date_event" name="date_event" value="{{date_event}}" readonly required>
                 <p class="text_input_p lucida">Hora</p>
-                <input type="time" name="hour_event" id="hour_event" class="date_input" value="{{hour_event}}"required>
+                <input type="time" name="hour_event" id="hour_event" class="date_input" value="{{hour_event}}"readonly required>
             </div>
             
-            <input type="hidden" name="color" id="color" value="{{color}}">
-            <input type="hidden" name="select" id="select" value="{{icon}}">
+            <input type="hidden" name="color" id="color" value="{{color}}"readonly>
+            <input type="hidden" name="select" id="select" value="{{icon}}"readonly>
             <input type="submit" style="width: 100%;"value="Criar" class="botoes_header_buttons lucida">
                 
         </form>
@@ -156,15 +156,188 @@
             <p class="lucida forecast_null_explanation_p">Clique em "Criar" para criar seu evento</p>
         </div>
         {% else %}
-        <div class="climate_query_div">
+        <div class="climate_query_div {{condicao_climatica.0}}">
+            <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+                
+                <div class="icon_circle_div">
+
+                    <img class="icon_calendar_img"src="{% static 'media/climate_icons/'%}{{condicao_climatica.1}}_icon.png" alt="">
+
+                </div>
+                <p class="lucida climate_query_h_p">{{condicao_climatica.2}}</p>
+            </div>
+            <p class="lucida climate_query_descr_p">{{condicao_climatica.3}}</p>
+
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/temperature_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Temperatura</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for temp in city_info.0  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{temp}}°C</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/humidty_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Umidade Relativa</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for um in city_info.1  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{um}}%</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/icons/ampl_term_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Temperatura Aparente</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for temp in city_info.2  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{temp}}°C</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/rain_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Probabilidade de chuva</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for chance in city_info.3  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{chance}}%</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/rain_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Chuva</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for mm in city_info.4  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{mm}}mm</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
             
-            {% comment %} <p>Temperatura</p>
-            {% for value in city_info.0 %}
-                {% if forloop.counter0 in intervalo_horas %}
-                {{value}}
-            {% endif %}
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/cloudy_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Cobertura por nuvens</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for cloud in city_info.5  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{cloud}}%</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/icons/wind_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Velocidade do vento</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for v in city_info.6  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{v}}km/hr</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
             
-            {% endfor %} {% endcomment %}
+            
 
 
 
@@ -220,18 +393,6 @@
     selector.addEventListener('change',function(){
         var value=selector.value;
         icon.src=base_path+value;
-    });
-
-    const selector_country = document.getElementById("country");
-    const image = document.getElementById("country_icon");
-
-    selector_country.addEventListener("change", function(){
-
-        const option =
-            selector_country.options[selector_country.selectedIndex];
-
-             image.src = option.dataset.icon;
-
     });
     
 </script>
