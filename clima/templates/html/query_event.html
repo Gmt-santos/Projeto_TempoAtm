@@ -95,18 +95,38 @@
                         
             </div>
     {%else%}
-    <form style="background-color:initial;"class="form_events_form"action="{% url 'clima:index' %}" method="POST">
+    <form style="align-items: center;"class="form_events_form"action="#" method="POST">
             {% csrf_token %}
-            <div style="display:flex;width: 100%;justify-content: center;">
+           
                 <p class="title_form_p">Pesquise seu evento!</p>
                 <input placeholder="Título do evento" type="text" name="name" id="name" class="info_input" required>
-            </div>
+        
                 <input type="submit" style="width: 100%;"value="Avançar" class="botoes_header_buttons lucida">
                 
         </form>
 
     {%endif%}
+    {% if events %}
+        {% for event in events %}
+        <form method="POST" style="margin:20px;" action="{% url 'clima:form_event' %}">
+            {% csrf_token %}
+            <input type="hidden" name="id_event" id="id_event"value={{event.0}}>
+            <div class="event_card_div">
+                <div style="display:flex;flex-direction: row;align-items: center;justify-content: space-evenly;width: 100%;">
+                    <p class="event_title_dashboard_id_p">{{event.0}}</p>
+                    
+                    <p class="event_title_dashboard_name_p">{{event.1}}</p>
+                </div>
+                <p class="event_title_dashboard_p">{{event.2}}</p>
+                <p class="event_title_dashboard_p">{{event.3}}</p>
+                <input class= "botoes_header_buttons"type="submit" value="ACESSAR">
+            </div>
+            
+        </form>
+        {% endfor %}
+    {% endif %}
     </div>
+    
     
 </body>
 </html>

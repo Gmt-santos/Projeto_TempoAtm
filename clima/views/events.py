@@ -144,9 +144,32 @@ def insert_event(request):
 
 def query_event(request):
     if(request.session.get("email")):
-        return render(request,"html/query_event.html")
+        if(request.POST.get("name")):
+            load_dotenv()
+            HOST=os.getenv("HOST")
+            USER=os.getenv("USER")
+            PASSWORD=os.getenv("PASSWORD")
+            DATABASE=os.getenv("DATABASE")
+            port=5432
+            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+            cursor=connection.cursor()
+            cursor.execute("select events.id,events.nome,events.dia,events.hora from events join users on events.fk_id_user=users.id" \
+            " where users.id=%s and events.nome like %s",[request.session["id_user"],request.POST.get("name")])
+            events=cursor.fetchall()
+            context={
+                "events":events
+
+            }
+            return render(request,"html/query_event.html",context=context)
+        else:
+            context={
+                "events":None
+            }
+            return render(request,"html/query_event.html",context=context)
     else:
         return redirect("clima:index")
+    
+    
 def form_event(request):
     if(request.method == "POST" and request.session.get("email")):
         load_dotenv()
@@ -155,6 +178,37 @@ def form_event(request):
         PASSWORD=os.getenv("PASSWORD")
         DATABASE=os.getenv("DATABASE")
         port=5432
-        connection=psycopg2.connect(host=HOST,password=PASSWORD,database=DATABASE,port=port)
+        connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
         cursor=connection.cursor()
-        cursor.execute("select * from events where events.id=%s union select * from types union select* from cities")
+        cursor.execute("select events.* from events where events.id=%s",[request.POST.get("id_event"),])
+        event=cursor.fetchone()
+        '''
+        event
+        [0]->id
+        [1]->nome
+        [2]->descr
+        [3]->dia
+        [4]->hora
+        [5]->color
+        [6]->fk_type
+        [7]->fk_id_user
+        [8]->fk_city
+
+        '''
+        data_iso=event[3]
+        data_iso=data_iso.isoformat()
+        cursor.execute("select id,name,country,icon,latitude,longitude from cities")
+        country_obj=cursor.fetchall()
+        
+        context={
+            "events":event,
+            "cities":country_obj,
+            "data_iso":data_iso,
+        }
+        return render(request,"html/form_event.html",context=context)
+    else:
+        redirect("clima:dashboard_clima")
+    
+def update_event(request):
+    ...
+def delete_event(request):...

@@ -12,7 +12,7 @@ textarea{
     flex-direction: column;
     align-items: flex-start;
     margin-top: 110px;
-    margin-bottom: 110px;
+    
     gap:10px;
 }
 .title_form_p{
@@ -134,6 +134,28 @@ textarea{
     color:white;
     font-size: 12px;
 }
+.event_title_dashboard_p{
+    color:white;
+    font-size: 15px;
+}
+.event_title_dashboard_name_p{
+    color:white;
+    font-size: 20px;
+}
+.event_title_dashboard_id_p{
+    color:white;
+    font-size: 22px;
+}
+.event_card_div{
+    display:flex;
+    flex-direction: column;
+    background-color: var(--secondary-color-rain);
+    justify-content: flex-start; 
+    width:350px;
+    padding:10px;
+    border-radius: 20px;   
+    align-items:center;
+}
 /* Cores eventos/climas*/
 .red-e{
     background-color: darkred;
@@ -182,8 +204,4 @@ textarea{
 .event_icon_img{
     width:40px;
     height: 40px;
-}
-.event_title_dashboard_p{
-    color:white;
-    font-size: 15px;
 }
