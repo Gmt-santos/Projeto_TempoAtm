@@ -1,0 +1,140 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/style_events.css' %}">
+    <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
+    <title>Dashboard</title>
+</head>
+{% if not request.session.auth%}
+
+<div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login'%}"> <button class="botoes_header_buttons lucida">LOGIN</button></a>
+              
+               <a href="{% url 'clima:register' %}"><button class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% else %}
+    <div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+              <div class="botoes_header_div">
+                <a href="{% url 'clima:dashboard_clima' %}"> <button class="botoes_header_buttons lucida">INÍCIO</button></a>
+                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
+              
+            </div>
+            <div class="header_hello_div">
+                <img src="{% static 'media/icons_user/'%}{{request.session.icon}}" alt="" class="icon_user_img">
+                <p class="hello_user_p lucida">Olá {{request.session.name}} !!!</p>
+
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons lucida">LOGOUT</button></a>
+              
+              
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% endif %}
+<body class="gradient">
+    <div class="container">
+        {% if not request.session.auth %}
+
+
+        
+            <div class="not_auth_div">
+            
+
+                    <div class="info_not_auth_div">
+                        <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                            <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
+
+                            <p class="title_not_auth_p lucida">
+                                Você não está logado!
+                            </p>
+                            
+                        </div>
+                        <div style="display:flex;flex-direction: column;align-items: center;gap:10px">
+
+                        <p class="lucida texto_auxiliar_botoes_p">Faça o login caso já tenha conta</p>
+                        <a style="width: 100%;" href="{% url 'clima:login'%}"> <button  style="width: 100%;" class="botoes_header_buttons lucida">LOGIN</button></a>
+                        <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
+                        <a style="width: 100%;" href="{% url 'clima:register' %}"><button style="width: 100%;"class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+
+
+
+
+
+                        </div>
+                        
+                       
+                    </div>
+                        
+            </div>
+    {%else%}
+    <div style="align-items: center;"class="form_events_form">
+        
+        <p class="title_form_p">Eventos encontrados!</p>
+       
+        
+    </div>
+
+    {%endif%}
+    {% if events %}
+        {% for event in events %}
+        <form method="POST" style="margin:20px;" action="{% url 'clima:event_query_event' %}">
+            {% csrf_token %}
+            <input type="hidden" name="name" value={{event.1}}>
+            <input type="hidden" name="descr" value={{event.2}}>
+            <input type="hidden" name="hour_event" value={{event.4}}>
+            <input type="hidden" name="fk_type" value={{event.6}}>
+            <input type="hidden" name="date_event" id="id_event"value={{event.3}}>
+           
+            <input type="hidden" name="city_name"value={{event.9}}>
+            <input type="hidden" name="city_country"value={{event.10}}>
+            <input type="hidden" name="city_lat"value={{event.11}}>
+            <input type="hidden" name="city_long"value={{event.12}}>
+            <input type="hidden" name="city_icon"value={{event.13}}>
+            
+            <div class="event_card_div">
+                <div style="display:flex;flex-direction: row;align-items: center;justify-content: space-evenly;width: 100%;">
+                    <p class="event_title_dashboard_id_p">{{event.0}}</p>
+                    
+                    <p class="event_title_dashboard_name_p">{{event.1}}</p>
+                </div>
+                <p class="event_title_dashboard_p">{{event.2}}</p>
+                <p class="event_title_dashboard_p">Data: {{event.3}}</p>
+                <input class= "botoes_header_buttons"type="submit" value="ACESSAR">
+            </div>
+            
+        </form>
+        {% endfor %}
+    {% endif %}
+    </div>
+    
+    
+</body>
+</html>

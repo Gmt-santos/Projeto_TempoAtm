@@ -98,8 +98,9 @@
 
 
     {%else%}
-        <form class="form_events_form"action="{% url "clima:update_event" %}" method="POST">
+        <form class="form_events_form" method="POST">
             {% csrf_token %}
+            <input type="hidden" id="id_user" name="id_user"readonly required value="{{events.7}}">
             <input type="hidden" id="id_event" name="id_event"readonly required value="{{events.0}}">
             <div style="display:flex;width: 100%;justify-content: center    ;">
                 <p class="title_form_p">Edite o seu evento!</p>
@@ -177,8 +178,8 @@
                 
                 </div>
                
-                <input type="submit" style="width: 100%;"value="ATUALIZAR" class="botoes_header_buttons lucida">
-                 <a href="{% url 'clima:delete_event' events.0 request.session.id_user %}"style="width:100%;text-align:center;align-content:center;text-decoration:none;"class="botoes_header_buttons lucida">DELETAR</a>
+                <input formaction="{% url "clima:update_event" %}"type="submit" style="width: 100%;"value="ATUALIZAR" class="botoes_header_buttons lucida">
+                <input formaction="{% url "clima:delete_event" %}"type="submit" style="width: 100%;"value="DELETAR" class="botoes_header_buttons lucida">
                 
         </form>
     {% endif %}

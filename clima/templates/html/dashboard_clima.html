@@ -129,11 +129,11 @@
                     {% if request.session.dia_atual == day and real_year == request.session.ano_atual and real_month == request.session.mes_atual %}
                     
 
-                        <td class="lucida dia_atual_td">{{day}}</td>
+                        <td onclick="redirect_to_view_event(this.id)"id="{{request.session.ano_atual}}-{{request.session.mes_atual}}-{{day}}"class="lucida dia_atual_td">{{day}}</td>
 
                     {% else %}
 
-                        <td class=" lucida dia_td">{{day}}</td>
+                        <td onclick="redirect_to_view_event(this.id)"id="{{request.session.ano_atual}}-{{request.session.mes_atual}}-{{day}}"class=" lucida dia_td">{{day}}</td>
 
                     {% endif %}
 
@@ -232,4 +232,11 @@
 </body>
 
 </html>
-
+<script>
+    function redirect_to_view_event(id){
+        window.location.href="view_event/"+id.toString()+"/";
+    }
+    {% comment %} function redirect_to_view_next_event(id){
+        window.location.href="view_next_event/"+id.toString()+"/"+"{}";
+    } {% endcomment %}
+</script>

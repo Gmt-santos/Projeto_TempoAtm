@@ -19,13 +19,7 @@ def dashboard_clima(request):
     #Fica subentendido o templates/...
      
      primeiro_dia,tamanho_calendario=utils.coletar_primeirodia_mes(request.session["ano_atual"],request.session["mes_atual"])
-     hoje=datetime.date.today()
-     mes_atual=hoje.month
-     ano_atual=hoje.year
-     dia_atual=hoje.day
-     request.session["mes_atual"]=int(mes_atual)
-     request.session["ano_atual"]=int(ano_atual)
-     request.session["dia_atual"]=int(dia_atual)
+     
      try:
         if(request.session["auth"] ==  True):
             HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()

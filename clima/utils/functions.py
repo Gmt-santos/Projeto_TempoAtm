@@ -109,7 +109,6 @@ def retirar_id_lat_long(value:str):
 
 def hora_evento(request):
     hora_evento=request.POST.get("hour_event")
-    counter=0
     string_hora=hora_evento[0]+hora_evento[1]
     int_hora=int(string_hora)
     if(int_hora==0):

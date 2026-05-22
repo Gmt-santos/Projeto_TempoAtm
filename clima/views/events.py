@@ -102,6 +102,7 @@ def climate_query(request):
     except KeyError:
         return redirect("clima:dashboard_clima")
     
+    
 
 def insert_event(request):
     if(request.method == "POST"):
@@ -208,22 +209,22 @@ def form_event(request):
             return render(request,"html/form_event.html",context=context)
         
         except Exception:
-             
-             redirect("clima:dashboard_clima")
+    
+             return redirect("clima:dashboard_clima")
 
         finally:
                 if(connection is not None):
                     cursor.close()
                     connection.close()
     else:
-        redirect("clima:dashboard_clima")
+       return  redirect("clima:dashboard_clima")
     
 
 
 def update_event(request):
     if(request.method=="POST"):
 
-        if(request.session.get("email") and request.POST.get("id_user") == request.session["id_user"]):
+        if(request.session.get("email") and request.session["id_user"] == int(request.POST.get("id_user")) ):
             
             try:
                 HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
@@ -260,13 +261,14 @@ def update_event(request):
 
 def delete_event(request):
     if(request.method=="POST"):
-        if(request.session.get("email") and request.session["id_user"] == id_user):
+        
+        if(request.session.get("email") and request.session["id_user"] == int(request.POST.get("id_user"))):
             try:
                 HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
                 cursor=connection.cursor()
                 
-                cursor.execute("delete from events where events.id=%s and events.fk_id_user=%s",[id_event,id_user])
+                cursor.execute("delete from events where events.id=%s and events.fk_id_user=%s",[request.POST.get("id_event"),request.POST.get("id_user")])
                 connection.commit()
                 
                 return redirect("clima:dashboard_clima")
@@ -281,6 +283,121 @@ def delete_event(request):
     else:
         return redirect("clima:dashboard_clima")
     
-def view_event(request,id_event,id_user):
-    ...
+def view_event(request,date):
+    if(request.session.get("email") and request.session.get("id_user")):
+        try:
+            HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+            cursor=connection.cursor()
+            
+            cursor.execute("select events.*,cities.name,cities.country,cities.latitude,cities.longitude,cities.icon " \
+            "from events join cities on events.fk_city=cities.id where events.dia=%s and events.fk_id_user=%s",[date,request.session["id_user"]])
+            events_obj=cursor.fetchall()
+            context={
+                "events":events_obj,
+            }
+            '''
+            event
+            [0]->id
+            [1]->nome
+            [2]->descr
+            [3]->dia
+            [4]->hora
+            [5]->color
+            [6]->fk_type
+            [7]->fk_id_user
+            [8]->fk_city
+            [9]->name(city)
+            [10]->country(city)
+            [11]->latitude
+            [12]->longitude
+            [13]->icon _country
+            '''
+            return render(request,"html/view_event.html",context=context)
+        except Exception:
+                return redirect("clima:dashboard_clima")
+        finally:
+            if(connection is not None):
+                cursor.close()
+                connection.close()
+    else:
+        return redirect("clima:dashboard_clima")
     
+
+def event_query_climate(request):
+    try:
+
+        if(request.method=="POST"):
+
+            if(request.session["email"] and request.session["id_user"]==int(request.POST.get("id_user"))):
+               
+                hoje=datetime.today()
+                data_event=datetime.strptime(request.POST.get("date_event"),"%Y-%m-%d")
+                diferenca:timedelta=data_event-hoje
+                if(diferenca>=7):
+                    HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+                    connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+                    cursor=connection.cursor()
+                    cursor.execute("select types.icon from types where types.id=%s ",[request.POST.get("fk_type"),])
+                    icon_obj=cursor.fetchone()
+                    if not(icon_obj):
+                            return redirect("clima:dashboard_clima")
+                    icon_img=icon_obj[0]
+                    context={
+                        'name':request.POST.get("name"),
+                        'descr':request.POST.get("descr"),
+                        'hour_event':request.POST.get('hour_event'),
+                        'date_event':request.POST.get("date_event"),
+                        'city_event':request.POST.get('city_event'),
+                        'city_name':request.POST.get("city_name"),
+                        'city_country':request.POST.get("city_country"),
+                        'city_info':city_info,
+                        'intervalo_horas':intervalo_horas,
+                        'condicao_climatica':condicao_climatica,
+                        'icon_img':request.POST.get("city_icon"),
+                        'forecast_null':True,
+                    }
+                    render(request,'html/event_query_climate.html',context=context)
+                    
+                    
+                else:
+                    intervalo_horas=utils.hora_evento(request)
+                    city_info=api.get_data(request,request.POST.get("city_lat"),request.POST.get("city_long"))
+                    condicao_climatica=utils.avaliacao_condicao_climatica(city_info,intervalo_horas)
+                    HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+                    connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+                    cursor=connection.cursor()
+                    cursor.execute("select types.icon from types where types.id=%s ",[request.POST.get("fk_type"),])
+                    icon_obj=cursor.fetchone()
+                    if not(icon_obj):
+                            return redirect("clima:dashboard_clima")
+                    icon_img=icon_obj[0]
+                    context={
+                        'name':request.POST.get("name"),
+                        'descr':request.POST.get("descr"),
+                        'hour_event':request.POST.get('hour_event'),
+                        'date_event':request.POST.get("date_event"),
+                        'city_event':request.POST.get('city_event'),
+                        'city_name':request.POST.get("city_name"),
+                        'city_country':request.POST.get("city_country"),
+                        'city_info':city_info,
+                        'intervalo_horas':intervalo_horas,
+                        'condicao_climatica':condicao_climatica,
+                        'icon_img':request.POST.get("city_icon"),
+                        'forecast_null':False,
+                    }
+                    render(request,'html/event_query_climate.html',context=context)
+                    
+
+
+
+        else:
+            return redirect("clima:dashboard_clima")
+    except IndexError:
+        return redirect("clima:dashboard_clima")
+    except KeyError:
+        return redirect("clima:dashboard_clima")
+    finally:
+        if connection is not None:
+            cursor.close()
+            connection.close()
