@@ -211,3 +211,11 @@ def avaliacao_condicao_climatica(city_info,intervalo):
         [6]->Velocidade do vento
         
         '''
+def load_var_env():
+    load_dotenv()
+    HOST=os.getenv("HOST")
+    USER=os.getenv("USER")
+    PASSWORD=os.getenv("PASSWORD")
+    DATABASE=os.getenv("DATABASE")
+    port=5432
+    return HOST,USER,PASSWORD,DATABASE,port

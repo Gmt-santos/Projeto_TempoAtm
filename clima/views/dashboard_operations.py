@@ -19,15 +19,16 @@ def dashboard_clima(request):
     #Fica subentendido o templates/...
      
      primeiro_dia,tamanho_calendario=utils.coletar_primeirodia_mes(request.session["ano_atual"],request.session["mes_atual"])
-     
+     hoje=datetime.date.today()
+     mes_atual=hoje.month
+     ano_atual=hoje.year
+     dia_atual=hoje.day
+     request.session["mes_atual"]=int(mes_atual)
+     request.session["ano_atual"]=int(ano_atual)
+     request.session["dia_atual"]=int(dia_atual)
      try:
         if(request.session["auth"] ==  True):
-            load_dotenv()
-            HOST=os.getenv("HOST")
-            USER=os.getenv("USER")
-            PASSWORD=os.getenv("PASSWORD")
-            DATABASE=os.getenv("DATABASE")
-            port_=5432
+            HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
             
@@ -69,22 +70,26 @@ def dashboard_clima(request):
                 
                 return render(request,'html/dashboard_clima.html',context=context)
             else:
-                connection.close()
+                
                 return redirect("clima:login")
         else:
             
             return redirect("clima:login")
     
      except KeyError:
-         connection.close()
+         
          return redirect("clima:login")
      except IndexError:
-         connection.close()
+         
          return redirect("clima:login")
      except psycopg2.OperationalError as error:
-        connection.close()
+       
         messages.error(request,"Houve um erro ao cadastrar,tente novamente mais tarde")
         return render(request,'html/login_clima.html')
+     finally:
+            if(connection is not None):
+                    cursor.close()
+                    connection.close()
      
 #FUNÇÕES PARA ATUALIZAR MES E DATA #
 
@@ -108,13 +113,7 @@ def update_month_minus(request):
 def perfil(request):
     try:
         if(request.session["auth"] == True):
-                load_dotenv()
-                HOST=os.getenv("HOST")
-                USER=os.getenv("USER")
-                PASSWORD=os.getenv("PASSWORD")
-                DATABASE=os.getenv("DATABASE")
-                 # Porta padrao #
-                port_=5432
+                HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
                 cursor=connection.cursor()
                 cursor.execute("select id,name,country,icon from cities")
@@ -123,11 +122,15 @@ def perfil(request):
                     "cities":country_obj
                 }
     
-                connection.close()
+                
                 return render(request,"html/perfil.html",context)
     except psycopg2.OperationalError:
-         connection.close()
+       
          return redirect("clima:dashboard_clima")
     except KeyError:
-        connection.close()
+    
         return redirect("clima:login")
+    finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()

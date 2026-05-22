@@ -37,7 +37,7 @@
              <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
             </div>
               <div class="botoes_header_div">
-
+                <a href="#"> <button class="botoes_header_buttons lucida">INÍCIO</button></a>
                 <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
               
             </div>
@@ -156,7 +156,7 @@
 
         <div class="submenu_div">
             <div class="proximos_eventos_div">
-                <p class="lucida calendario_p">Próximos eventos:(finalizar depois)</p>
+                <p class="lucida calendario_p">Próximos eventos:</p>
                 {% for event in events %}
                     <div class="event_div {{event.2}}">  
                          <img class="event_icon_img"src="{% static 'media/events_icons/' %}{{event.3}}">

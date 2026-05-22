@@ -37,7 +37,7 @@
              <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
             </div>
               <div class="botoes_header_div">
-
+                <a href="{% url 'clima:dashboard_clima' %}"> <button class="botoes_header_buttons lucida">INÍCIO</button></a>
                 <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
               
             </div>
@@ -98,7 +98,7 @@
 
 
     {%else%}
-        <form class="form_events_form"action="{% url "clima:climate_query" %}" method="POST">
+        <form class="form_events_form"action="{% url "clima:update_event" %}" method="POST">
             {% csrf_token %}
             <input type="hidden" id="id_event" name="id_event"readonly required value="{{events.0}}">
             <div style="display:flex;width: 100%;justify-content: center    ;">
@@ -178,7 +178,7 @@
                 </div>
                
                 <input type="submit" style="width: 100%;"value="ATUALIZAR" class="botoes_header_buttons lucida">
-                 <a href="{% url "clima:delete_event" %}"style="width:100%;text-align:center;align-content:center"class="botoes_header_buttons lucida">DELETAR</a>
+                 <a href="{% url 'clima:delete_event' events.0 request.session.id_user %}"style="width:100%;text-align:center;align-content:center;text-decoration:none;"class="botoes_header_buttons lucida">DELETAR</a>
                 
         </form>
     {% endif %}

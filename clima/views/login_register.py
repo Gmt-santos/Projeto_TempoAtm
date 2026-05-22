@@ -3,9 +3,10 @@ from argon2 import PasswordHasher
 from argon2 import exceptions as hash_exceptions
 from django.contrib import messages
 import datetime
+from .. import utils
 #Coleta as variaveis do .env#
 import os
-from dotenv import load_dotenv
+
 # postgre + python
 import psycopg2
 
@@ -29,15 +30,8 @@ def login(request):
     
 
 def login_enter(request):
-   
-    load_dotenv()
     ph=PasswordHasher()
-    HOST=os.getenv("HOST")
-    USER=os.getenv("USER")
-    PASSWORD=os.getenv("PASSWORD")
-    DATABASE=os.getenv("DATABASE")
-    # Porta padrao #
-    port_=5432
+    HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
     if request.method == "POST":
         _email=request.POST.get("email")
         _password=request.POST.get("senha")
@@ -50,15 +44,21 @@ def login_enter(request):
             cursor.execute("select users.name,users.password,users.icon,users.email,cities.name,username,users.id from users join " \
             "cities on users.fav_city=cities.id where users.email=%s",[_email])
             user_obj=cursor.fetchall()
-            connection.close()
+       
             # força o python a verificar se tem algo nessa posicao
             if user_obj[0][3]:
                 ...
 
         except IndexError:
             messages.error(request,"Esse email não está cadastrado ou a senha é inválida")
-            connection.close()
+          
             return render(request,'html/login_clima.html')
+        
+        finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
+        
             
         
        
@@ -84,13 +84,21 @@ def login_enter(request):
                 
                 request.session['email']=user_obj[0][3]
                 request.session['auth']=True
-                connection.close()
+                
                 return render(request,'html/intermediary_clima.html')
             
         except hash_exceptions.VerifyMismatchError:
             messages.error(request,"Esse email não está cadastrado ou a senha é inválida")
-            connection.close()
+           
             return render(request,'html/login_clima.html')
+        except Exception as error:
+             messages.error(request,"Houve um erro inesperado na operação")
+             return render(request,'html/login_clima.html')
+        
+        finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
 
 
     return render(request,'html/login_clima.html')
@@ -105,13 +113,7 @@ def login_out(request):
 
 
 def register(request):
-    load_dotenv()
-    HOST=os.getenv("HOST")
-    USER=os.getenv("USER")
-    PASSWORD=os.getenv("PASSWORD")
-    DATABASE=os.getenv("DATABASE")
-    # Porta padrao #
-    port_=5432
+    HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
     connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
     cursor=connection.cursor()
     cursor.execute("select id,name,country,icon from cities")
@@ -126,14 +128,9 @@ def register(request):
 
 def register_operation(request):
     if request.method == "POST":
-        load_dotenv()
+     
         ph=PasswordHasher()
-        HOST=os.getenv("HOST")
-        USER=os.getenv("USER")
-        PASSWORD=os.getenv("PASSWORD")
-        DATABASE=os.getenv("DATABASE")
-        # Porta padrao #
-        port_=5432
+        HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
         nome=request.POST.get("nome")
         email=request.POST.get("email")
         senha=request.POST.get("senha")
@@ -160,30 +157,27 @@ def register_operation(request):
                     connection.commit()
                     connection.close()
                     return render(request,'html/login_clima.html')
-            except psycopg2.OperationalError as error:
+            except Exception as error:
                 messages.error(request,"Houve um erro ao cadastrar,tente novamente mais tarde")
                 return render(request,'html/login_clima.html')
+            finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
                 
 
-                ########### Continuar Trabalhando ##################
 
 
 def update_operation(request):
         try:
             if request.method == "POST":
-                load_dotenv()
-                HOST=os.getenv("HOST")
-                USER=os.getenv("USER")
-                PASSWORD=os.getenv("PASSWORD")
-                DATABASE=os.getenv("DATABASE")
-                # Porta padrao #
-                port_=5432
+                HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
                 cursor=connection.cursor()
                 nome=request.POST.get("nome")
                 icone=request.POST.get("select")
                 fav_city=request.POST.get("country")
-                print(nome,icone)
+               
                 username=request.POST.get("username")
                 cursor.execute("update users set name=%s,icon=%s,fav_city=%s where username=%s",[nome,icone,fav_city,request.session["username"]])
                 connection.commit()
@@ -192,8 +186,11 @@ def update_operation(request):
                 connection.close()
                 return redirect("clima:dashboard_clima")
             else:
-                connection.close()
+               
                 return redirect("clima:index")
-        except psycopg2.OperationalError:
-                connection.close()
+        except Exception:
                 return redirect("clima:dashboard")
+        finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()

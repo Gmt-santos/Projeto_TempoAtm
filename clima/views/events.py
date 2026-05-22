@@ -4,19 +4,12 @@ from .. import api
 from .. import utils
 from datetime import datetime,timedelta
 import os
-from dotenv import load_dotenv
 import psycopg2
 
 def create_event(request):  
     try:
         if(request.session["email"] and request.session["name"]):
-            load_dotenv()
-            HOST=os.getenv("HOST")
-            USER=os.getenv("USER")
-            PASSWORD=os.getenv("PASSWORD")
-            DATABASE=os.getenv("DATABASE")
-            # Porta padrao #
-            port_=5432
+            HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
             cursor=connection.cursor()
             cursor.execute("select id,name,country,icon,latitude,longitude from cities")
@@ -24,15 +17,15 @@ def create_event(request):
             context={
                 "cities":country_obj
             }
+            connection.close()
             return render(request,'html/create_event.html',context=context)
     except psycopg2.OperationalError:
-        connection.close()
+        
         redirect("clima:dashboard_clima")
     except IndexError:
-        connection.close()
+      
         redirect("clima:dashboard_clima")
-    except KeyError:
-        connection.close()
+    
         redirect("clima:dashboard_clima")
 
 
@@ -100,6 +93,7 @@ def climate_query(request):
                     "intervalo_horas":intervalo_horas,
                     "condicao_climatica":condicao_climatica
                     }
+                    
                     return render(request,'html/climate_query.html',context=context)
         else:
             return redirect("clima:dashboard_clima")
@@ -111,12 +105,7 @@ def climate_query(request):
 
 def insert_event(request):
     if(request.method == "POST"):
-        load_dotenv()
-        HOST=os.getenv("HOST")
-        USER=os.getenv("USER")
-        PASSWORD=os.getenv("PASSWORD")
-        DATABASE=os.getenv("DATABASE")
-        port=5432
+        HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
         
         name=request.POST.get("name")
         descr=request.POST.get("descr")
@@ -128,39 +117,52 @@ def insert_event(request):
         try:
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
             cursor=connection.cursor()
-            cursor.execute("select id from types where icon =%s",[icon,])
-            icon_id=cursor.fetchone()[0]
+            cursor.execute("select id from types where icon =%s",[request.POST.get("select"),])
+            icon_obj=cursor.fetchone()
+            if not(icon_obj):
+                return redirect("clima:dashboard_clima")
+            icon_id=icon_obj[0]
             cursor.execute("insert into events(nome,descr,dia,hora,color,fk_type,fk_id_user,fk_city)values(" \
             "%s,%s,%s,%s,%s,%s,%s,%s);",[name,descr,date_event,hour_event,color,icon_id,request.session["id_user"],id_city])
             connection.commit()
-            connection.close()
+            
             return redirect("clima:dashboard_clima")
         except psycopg2.OperationalError:
             return redirect("clima:dashboard_clima")
-        except KeyError:
+        except Exception :
             return redirect("clima:dashboard_clima")
+        finally:
+            if(connection is not None):
+                cursor.close()
+                connection.close()
     else:
         redirect("clima:dashboard_clima")
 
 def query_event(request):
     if(request.session.get("email")):
         if(request.POST.get("name")):
-            load_dotenv()
-            HOST=os.getenv("HOST")
-            USER=os.getenv("USER")
-            PASSWORD=os.getenv("PASSWORD")
-            DATABASE=os.getenv("DATABASE")
-            port=5432
-            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
-            cursor=connection.cursor()
-            cursor.execute("select events.id,events.nome,events.dia,events.hora from events join users on events.fk_id_user=users.id" \
-            " where users.id=%s and events.nome like %s",[request.session["id_user"],request.POST.get("name")])
-            events=cursor.fetchall()
-            context={
-                "events":events
+            try:
 
-            }
-            return render(request,"html/query_event.html",context=context)
+                HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+                connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+                cursor=connection.cursor()
+                cursor.execute("select events.id,events.nome,events.dia,events.hora from events join users on events.fk_id_user=users.id" \
+                " where users.id=%s and events.nome like %s",[request.session["id_user"],request.POST.get("name")])
+                events=cursor.fetchall()
+                context={
+                    "events":events
+
+                }
+                
+                return render(request,"html/query_event.html",context=context)
+            
+            except Exception:
+                redirect("clima:dashboard_clima")
+
+            finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
         else:
             context={
                 "events":None
@@ -172,43 +174,113 @@ def query_event(request):
     
 def form_event(request):
     if(request.method == "POST" and request.session.get("email")):
-        load_dotenv()
-        HOST=os.getenv("HOST")
-        USER=os.getenv("USER")
-        PASSWORD=os.getenv("PASSWORD")
-        DATABASE=os.getenv("DATABASE")
-        port=5432
-        connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
-        cursor=connection.cursor()
-        cursor.execute("select events.* from events where events.id=%s",[request.POST.get("id_event"),])
-        event=cursor.fetchone()
-        '''
-        event
-        [0]->id
-        [1]->nome
-        [2]->descr
-        [3]->dia
-        [4]->hora
-        [5]->color
-        [6]->fk_type
-        [7]->fk_id_user
-        [8]->fk_city
+        try:
 
-        '''
-        data_iso=event[3]
-        data_iso=data_iso.isoformat()
-        cursor.execute("select id,name,country,icon,latitude,longitude from cities")
-        country_obj=cursor.fetchall()
+            HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+            
+            connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+            cursor=connection.cursor()
+            cursor.execute("select events.* from events where events.id=%s",[request.POST.get("id_event"),])
+            event=cursor.fetchone()
+            '''
+            event
+            [0]->id
+            [1]->nome
+            [2]->descr
+            [3]->dia
+            [4]->hora
+            [5]->color
+            [6]->fk_type
+            [7]->fk_id_user
+            [8]->fk_city
+
+            '''
+            data_iso=event[3]
+            data_iso=data_iso.isoformat()
+            cursor.execute("select id,name,country,icon,latitude,longitude from cities")
+            country_obj=cursor.fetchall()
+            connection.close()
+            context={
+                "events":event,
+                "cities":country_obj,
+                "data_iso":data_iso,
+            }
+            return render(request,"html/form_event.html",context=context)
         
-        context={
-            "events":event,
-            "cities":country_obj,
-            "data_iso":data_iso,
-        }
-        return render(request,"html/form_event.html",context=context)
+        except Exception:
+             
+             redirect("clima:dashboard_clima")
+
+        finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
     else:
         redirect("clima:dashboard_clima")
     
+
+
 def update_event(request):
+    if(request.method=="POST"):
+
+        if(request.session.get("email") and request.POST.get("id_user") == request.session["id_user"]):
+            
+            try:
+                HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+                connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+                id_city,lat,long=utils.retirar_id_lat_long(request.POST.get("country"))
+                cursor=connection.cursor()
+                cursor.execute("select id from types where icon =%s",[request.POST.get("select"),])
+                icon_obj=cursor.fetchone()
+                if not(icon_obj):
+                    return redirect("clima:dashboard_clima")
+                icon_id=icon_obj[0]
+                cursor.execute("update events set nome=%s,descr=%s,dia=%s,hora=%s,color=%s,fk_type=%s,fk_city=%s " \
+                "where events.fk_id_user = %s and events.id= %s",
+                [request.POST.get("name"),request.POST.get("descr"),request.POST.get("date_event"),request.POST.get("hour_event"),
+                request.POST.get("color"),icon_id,id_city,request.session["id_user"],request.POST.get("id_event")])
+                connection.commit() 
+                connection.close()
+                return redirect("clima:dashboard_clima")
+            
+            except Exception:
+                redirect("clima:dashboard_clima")
+
+            finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
+            
+
+        else:
+            return redirect("clima:dashboard_clima")
+        
+    else:
+        return redirect("clima:dashboard_clima")
+
+def delete_event(request):
+    if(request.method=="POST"):
+        if(request.session.get("email") and request.session["id_user"] == id_user):
+            try:
+                HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
+                connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
+                cursor=connection.cursor()
+                
+                cursor.execute("delete from events where events.id=%s and events.fk_id_user=%s",[id_event,id_user])
+                connection.commit()
+                
+                return redirect("clima:dashboard_clima")
+            except Exception:
+                 return redirect("clima:dashboard_clima")
+            finally:
+                if(connection is not None):
+                    cursor.close()
+                    connection.close()
+        else:
+            return redirect("clima:dashboard_clima")
+    else:
+        return redirect("clima:dashboard_clima")
+    
+def view_event(request,id_event,id_user):
     ...
-def delete_event(request):...
+    
