@@ -1,0 +1,415 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/style_events.css' %}">
+    <link rel="shortcut icon" href="{% static 'media/images/logo.png'%}" type="image/x-icon">
+    <title>Dashboard</title>
+</head>
+{% if not request.session.auth%}
+
+<div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login'%}"> <button class="botoes_header_buttons lucida">LOGIN</button></a>
+              
+               <a href="{% url 'clima:register' %}"><button class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% else %}
+    <div style="display: block; height: fit-content;" >
+        <div class="header">
+            <div class="logo_nome_div">
+             <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+             <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
+            </div>
+              <div class="botoes_header_div">
+                <a href="{% url 'clima:dashboard_clima' %}"> <button class="botoes_header_buttons lucida">INÍCIO</button></a>
+                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
+              
+            </div>
+            <div class="header_hello_div">
+                <img src="{% static 'media/icons_user/'%}{{request.session.icon}}" alt="" class="icon_user_img">
+                <p class="hello_user_p lucida">Olá {{request.session.name}} !!!</p>
+
+            </div>
+
+            <div class="botoes_header_div">
+                <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons lucida">LOGOUT</button></a>
+              
+              
+            </div>
+            
+        </div>
+         
+
+    </div> 
+{% endif %}
+<body class="gradient">
+    
+    <div class="container">
+        {% if not request.session.auth %}
+
+
+        
+            <div class="not_auth_div">
+            
+
+                    <div class="info_not_auth_div">
+                        <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                            <img class="icon_info_img" src="{% static 'media/icons/info_icon.png'%}" alt="">
+
+                            <p class="title_not_auth_p lucida">
+                                Você não está logado!
+                            </p>
+                            
+                        </div>
+                        <div style="display:flex;flex-direction: column;align-items: center;gap:10px">
+
+                        <p class="lucida texto_auxiliar_botoes_p">Faça o login caso já tenha conta</p>
+                        <a style="width: 100%;" href="{% url 'clima:login'%}"> <button  style="width: 100%;" class="botoes_header_buttons lucida">LOGIN</button></a>
+                        <p class="lucida texto_auxiliar_botoes_p">Ou faça o seu registro caso seja a sua primeira vez aqui!!!</p>
+                        <a style="width: 100%;" href="{% url 'clima:register' %}"><button style="width: 100%;"class="botoes_header_buttons lucida">REGISTRE-SE</button></a> 
+
+
+
+
+
+                        </div>
+                        
+                       
+                    </div>
+                        
+            </div>
+
+
+    {%else%}
+    <div class="org_dual_div">
+        <div class="form_events_form {{color}}"style="align-items:center">
+            {% csrf_token %}
+            <div style="display:flex;justify-content: center;flex-direction: column;">
+                <p class="title_form_p">Evento</p>
+                 <p class="view_info_title_p lucida">{{name}}</p>
+            </div>
+           
+            <div class="view_info_iconevent_div">
+                
+                <img class="event_create_icon_img"src="{% static 'media/events_icons/'%}{{icon_event_img}}" alt="">
+            </div>
+            <div class="view_info_div">
+
+             
+              
+
+            </div>
+            <div class="view_info_div">
+                <p class="text_input_p lucida">Descrição:</p>
+                <p class="text_input_p lucida">{{descr}}</p>
+            </div>
+            <div class="view_info_div">
+                <p class="text_input_p lucida">Hora do evento:</p>
+                <p class="text_input_p lucida">{{hour_event}}</p>
+            </div>
+            <div class="view_info_div">
+
+                <p class="text_input_p lucida">Data do evento:</p>
+                <p class="text_input_p lucida">{{date_event}}</p>
+
+            </div>
+            <div class="view_info_div">
+                <img class="image_side_input"src="{% static 'media/country_icons/'%}{{icon_country_img}}" alt="">
+                <p class="text_input_p lucida">Cidade:</p>
+                <p class="text_input_p lucida">{{city_name}}-{{city_country}}</p>
+
+            </div>
+
+
+            
+
+            
+            
+
+
+
+
+            
+                
+        </div>
+
+
+        <!-- CLIMATE INFO QUERY DIVS -->
+        {% if forecast_null%}
+        <div class="forecast_null_div">
+            <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+
+                <div class="icon_circle_div">
+
+                        <img class="icon_calendar_img" src="{% static 'media/icons/sad_face_icon.png'%}" alt="">
+
+                </div>
+
+                <p class="lucida forecast_null_h_p">Condição climática indisponível! </p>
+
+            </div>
+            <p class="lucida forecast_null_explanation_p">Devido a prezarmos pela precisão do modelo climático da OpenMeteo, nosso sistema atende até, no máximo,
+                uma semana de condições climáticas a partir do dia de hoje.O dia do evento que escolheu está fora desse intervalo.
+            </p>
+             <p class="lucida forecast_null_explanation_p">Apesar disso, quando você estiver a uma semana do evento que está visualizando, 
+                confira nosso sistema para verificar a condição climática
+            </p>
+                {% if messages %}
+
+                         {% for message in messages%}
+                            <div class="messages">
+
+                                 <p class="lucida error_p">{{message}}</p>
+
+
+                            </div>
+
+                         {% endfor %}
+
+          
+                {% endif %}     
+        </div>
+        {% else %}
+        <div class="climate_query_div {{condicao_climatica.0}}">
+            <div style="display:flex;flex-direction: row;align-items: center;gap:10px">
+                
+                <div class="icon_circle_div">
+
+                    <img class="icon_calendar_img"src="{% static 'media/climate_icons/'%}{{condicao_climatica.1}}_icon.png" alt="">
+
+                </div>
+                <p class="lucida climate_query_h_p">{{condicao_climatica.2}}</p>
+            </div>
+            <p class="lucida climate_query_descr_p">{{condicao_climatica.3}}</p>
+
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/temperature_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Temperatura</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for temp in city_info.0  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{temp}}°C</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/humidty_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Umidade Relativa</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for um in city_info.1  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{um}}%</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/icons/ampl_term_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Temperatura Aparente</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for temp in city_info.2  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{temp}}°C</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/rain_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Probabilidade de chuva</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for chance in city_info.3  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{chance}}%</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/rain_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Chuva</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for mm in city_info.4  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{mm}}mm</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+            
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/climate_icons/cloudy_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Cobertura por nuvens</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for cloud in city_info.5  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{cloud}}%</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div style="display:flex;flex-direction: row;gap:10px;">
+                <div class="icon_circle_events_div">
+
+                <img class="icon_info_climate_query_img"src="{% static 'media/icons/wind_icon.png'%}" alt="">
+
+                </div>
+                <p class="lucida climate_query_descr_p">Velocidade do vento</p>
+
+            </div>
+             
+            <div style="display:flex;flex-direction: row;width: 100%;justify-content: space-evenly;">
+                {% for v in city_info.6  %}
+                    {% if forloop.counter0 in intervalo_horas %}
+                        <div style="display:flex;flex-direction: column;">
+                            <p class="lucida numbers_info_p">{{forloop.counter0}}:00</p>
+                            <p class="lucida numbers_info_p">{{v}}km/hr</p>
+
+                        </div>
+                        
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+            
+            
+
+
+
+
+        </div>
+        {% endif %}
+        <!--  END CLIMATE INFO QUERY DIVS -->
+
+    </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <footer>
+        <div class="footer">
+             <div class="logo_nome_div">
+                <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
+                 <p class="logo_footer_p lucida" >MatWeather</p>
+            </div>
+            <a class= "footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos/Gmt-santos">Projeto educacional realizado por Gmt-santos</a>
+            <p class ="footer_credit_p lucida">--Todos os direitos reservados 2026--</p>
+            <div style="display:flex;flex-direction: row;gap: 10px;">
+                <a  class ="footer_credit_a lucida" target= "_blank" href="https://www.linkedin.com/in/guilherme-matias-tronco-3164043a9">Linkedin</a>
+                <a  class ="footer_credit_a lucida" target= "_blank"  href="https://github.com/Gmt-santos">GitHub</a>
+                
+                
+
+            </div>
+        </div>
+
+</footer>
+</body>
+
+</html>

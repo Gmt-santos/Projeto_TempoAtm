@@ -77,20 +77,3 @@
     font-size:14px;
     color:var(--primary-color-background);
 }
-.error_p{
-    font-size: 14px;
-    color:white;
-}
-.messages{
-
-    border-color: var(--primary-color-background);
-    border-width: 1px;
-    border-radius:20px;
-    border-style: solid;
-    height: fit-content;
-    padding:10px;
-    margin-top:10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}

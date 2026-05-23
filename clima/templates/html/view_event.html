@@ -105,19 +105,19 @@
     {%endif%}
     {% if events %}
         {% for event in events %}
-        <form method="POST" style="margin:20px;" action="{% url 'clima:event_query_event' %}">
+        <form method="POST" style="margin:20px;" action="{% url 'clima:event_query_climate' %}">
             {% csrf_token %}
-            <input type="hidden" name="name" value={{event.1}}>
-            <input type="hidden" name="descr" value={{event.2}}>
-            <input type="hidden" name="hour_event" value={{event.4}}>
-            <input type="hidden" name="fk_type" value={{event.6}}>
-            <input type="hidden" name="date_event" id="id_event"value={{event.3}}>
+            <input type="hidden" name="name" value="{{event.1}}">
+            <input type="hidden" name="descr" value="{{event.2}}">
+            <input type="hidden" name="hour_event" value="{{event.4}}">
+            <input type="hidden" name="fk_type" value="{{event.6}}">
+            <input type="hidden" name="date_event"value="{{event.3}}">
            
-            <input type="hidden" name="city_name"value={{event.9}}>
-            <input type="hidden" name="city_country"value={{event.10}}>
-            <input type="hidden" name="city_lat"value={{event.11}}>
-            <input type="hidden" name="city_long"value={{event.12}}>
-            <input type="hidden" name="city_icon"value={{event.13}}>
+            <input type="hidden" name="city_name"value="{{event.9}}">
+            <input type="hidden" name="city_country"value="{{event.10}}">
+            <input type="hidden" name="city_lat"value="{{event.11}}">
+            <input type="hidden" name="city_long"value="{{event.12}}">
+            <input type="hidden" name="city_icon"value="{{event.13}}">
             
             <div class="event_card_div">
                 <div style="display:flex;flex-direction: row;align-items: center;justify-content: space-evenly;width: 100%;">

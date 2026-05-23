@@ -5,8 +5,10 @@ from .. import utils
 from datetime import datetime,timedelta
 import os
 import psycopg2
+import locale
 
 def create_event(request):  
+    connection=None
     try:
         if(request.session["email"] and request.session["name"]):
             HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
@@ -17,16 +19,18 @@ def create_event(request):
             context={
                 "cities":country_obj
             }
-            connection.close()
+            
             return render(request,'html/create_event.html',context=context)
     except psycopg2.OperationalError:
-        
-        redirect("clima:dashboard_clima")
+        messages.error(request,"Houve um erro ao consultar as informações,tente novamente mais tarde")
+        return redirect("clima:dashboard_clima")
     except IndexError:
       
-        redirect("clima:dashboard_clima")
-    
-        redirect("clima:dashboard_clima")
+        return redirect("clima:dashboard_clima")
+    finally:
+        if connection is not None:
+            cursor.close()
+            connection.close()
 
 
 
@@ -59,42 +63,68 @@ def climate_query(request):
                     return render(request,'html/climate_query.html',context=context)
                 else:
                    
-                    city_info:list = api.get_data(request=request,lat=lat,long=long)
-                    intervalo_horas=utils.hora_evento(request=request)
-                    condicao_climatica=utils.avaliacao_condicao_climatica(city_info,intervalo_horas)
+                    city_info = api.get_data(request=request,lat=lat,long=long)
+
                     '''
-                    cityinfo
-                    [0]->Temperatura
-                    [1]->Umidade relativa
-                    [2]->Temperatura aparente
-                    [3]->Probabilidade de chuva
-                    [4]->Chuva
-                    [5]->Cobertura por nuvens
-                    [6]->Velocidade do vento
+                    api.get_data retorna falso caso haja algum erro 
+                    e retorna uma lista se tudo der certo
+                    '''
+
+                    if city_info:
+
+                        intervalo_horas=utils.hora_evento(request=request)
+                        condicao_climatica=utils.avaliacao_condicao_climatica(city_info,intervalo_horas)
+                        '''
+                        cityinfo
+                        [0]->Temperatura
+                        [1]->Umidade relativa
+                        [2]->Temperatura aparente
+                        [3]->Probabilidade de chuva
+                        [4]->Chuva
+                        [5]->Cobertura por nuvens
+                        [6]->Velocidade do vento
+                        
+                        '''
+                        '''
+                        condiçao climatica
+                        [0]-> cor
+                        [1]-> icone
+                        [2]-> Titulo
+                        [3]-> Descriçao
+                        '''
+                        context={
+                        "name":request.POST.get("name"),
+                        "descr":request.POST.get("descr"),
+                        "date_event":request.POST.get("date_event"),
+                        "hour_event":request.POST.get("hour_event"),
+                        "color":request.POST.get("color"),
+                        "icon":request.POST.get("select"),
+                        "id_city":id_city,
+                        "forecast_null":False,
+                        "city_info":city_info,
+                        "intervalo_horas":intervalo_horas,
+                        "condicao_climatica":condicao_climatica
+                        }
+                        
+                        return render(request,'html/climate_query.html',context=context)
                     
-                    '''
-                    '''
-                    condiçao climatica
-                    [0]-> cor
-                    [1]-> icone
-                    [2]-> Titulo
-                    [3]-> Descriçao
-                    '''
-                    context={
-                    "name":request.POST.get("name"),
-                    "descr":request.POST.get("descr"),
-                    "date_event":request.POST.get("date_event"),
-                    "hour_event":request.POST.get("hour_event"),
-                    "color":request.POST.get("color"),
-                    "icon":request.POST.get("select"),
-                    "id_city":id_city,
-                    "forecast_null":False,
-                    "city_info":city_info,
-                    "intervalo_horas":intervalo_horas,
-                    "condicao_climatica":condicao_climatica
+                    else:
+
+                        context={
+                        "name":request.POST.get("name"),
+                        "descr":request.POST.get("descr"),
+                        "date_event":request.POST.get("date_event"),
+                        "hour_event":request.POST.get("hour_event"),
+                        "color":request.POST.get("color"),
+                        "icon":request.POST.get("select"),
+                        "id_city":id_city,
+                        "forecast_null":True
                     }
-                    
+                    messages.error(request,"Houve um erro com a comunicação do servidor OpenMeteo!")
                     return render(request,'html/climate_query.html',context=context)
+
+            else:
+               return redirect("clima:dashboard_clima")
         else:
             return redirect("clima:dashboard_clima")
     except IndexError:
@@ -103,8 +133,10 @@ def climate_query(request):
         return redirect("clima:dashboard_clima")
     
     
+    
 
 def insert_event(request):
+    connection=None
     if(request.method == "POST"):
         HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
         
@@ -140,6 +172,7 @@ def insert_event(request):
         redirect("clima:dashboard_clima")
 
 def query_event(request):
+    connection=None
     if(request.session.get("email")):
         if(request.POST.get("name")):
             try:
@@ -148,7 +181,7 @@ def query_event(request):
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
                 cursor=connection.cursor()
                 cursor.execute("select events.id,events.nome,events.dia,events.hora from events join users on events.fk_id_user=users.id" \
-                " where users.id=%s and events.nome like %s",[request.session["id_user"],request.POST.get("name")])
+                " where users.id=%s and events.nome like %s",[request.session["id_user"],request.POST.get("name")+"%"])
                 events=cursor.fetchall()
                 context={
                     "events":events
@@ -157,8 +190,9 @@ def query_event(request):
                 
                 return render(request,"html/query_event.html",context=context)
             
-            except Exception:
-                redirect("clima:dashboard_clima")
+            except Exception as e:
+                print(e)
+                return redirect("clima:dashboard_clima")
 
             finally:
                 if(connection is not None):
@@ -285,7 +319,7 @@ def delete_event(request):
     
 def view_event(request,date):
     if(request.session.get("email") and request.session.get("id_user")):
-        try:
+         try:
             HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
             connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
             cursor=connection.cursor()
@@ -314,10 +348,11 @@ def view_event(request,date):
             [13]->icon _country
             '''
             return render(request,"html/view_event.html",context=context)
-        except Exception:
-                return redirect("clima:dashboard_clima")
-        finally:
-            if(connection is not None):
+         except Exception:
+                
+                 return redirect("clima:dashboard_clima")
+         finally:
+             if(connection is not None):
                 cursor.close()
                 connection.close()
     else:
@@ -325,16 +360,19 @@ def view_event(request,date):
     
 
 def event_query_climate(request):
+    connection=None
     try:
 
         if(request.method=="POST"):
 
-            if(request.session["email"] and request.session["id_user"]==int(request.POST.get("id_user"))):
-               
+            if(request.session["email"] and request.session["id_user"]):
+                locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
                 hoje=datetime.today()
-                data_event=datetime.strptime(request.POST.get("date_event"),"%Y-%m-%d")
+                
+                data_event=datetime.strptime(request.POST.get("date_event"),"%d de %B de %Y")
+                
                 diferenca:timedelta=data_event-hoje
-                if(diferenca>=7):
+                if(abs(int(diferenca.days))>=7):
                     HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
                     connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
                     cursor=connection.cursor()
@@ -348,21 +386,22 @@ def event_query_climate(request):
                         'descr':request.POST.get("descr"),
                         'hour_event':request.POST.get('hour_event'),
                         'date_event':request.POST.get("date_event"),
-                        'city_event':request.POST.get('city_event'),
+                        'color':request.POST.get("color"),
+                        # 'city_event':request.POST.get('city_event'), ?????
                         'city_name':request.POST.get("city_name"),
                         'city_country':request.POST.get("city_country"),
-                        'city_info':city_info,
-                        'intervalo_horas':intervalo_horas,
-                        'condicao_climatica':condicao_climatica,
-                        'icon_img':request.POST.get("city_icon"),
+                        
+                        'icon_country_img':request.POST.get("city_icon"),
+                        'icon_event_img':icon_img,
                         'forecast_null':True,
                     }
-                    render(request,'html/event_query_climate.html',context=context)
+                    return render(request,'html/event_query_climate.html',context=context)
                     
                     
                 else:
+                    data_event=datetime.strftime(data_event,"%Y-%m-%d")
                     intervalo_horas=utils.hora_evento(request)
-                    city_info=api.get_data(request,request.POST.get("city_lat"),request.POST.get("city_long"))
+                    city_info=api.get_data(request,request.POST.get("city_lat"),request.POST.get("city_long"),data_formatada=data_event)
                     condicao_climatica=utils.avaliacao_condicao_climatica(city_info,intervalo_horas)
                     HOST,USER,PASSWORD,DATABASE,port=utils.load_var_env()
                     connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port)
@@ -377,16 +416,18 @@ def event_query_climate(request):
                         'descr':request.POST.get("descr"),
                         'hour_event':request.POST.get('hour_event'),
                         'date_event':request.POST.get("date_event"),
+                        'color':request.POST.get("color"),
                         'city_event':request.POST.get('city_event'),
                         'city_name':request.POST.get("city_name"),
                         'city_country':request.POST.get("city_country"),
                         'city_info':city_info,
                         'intervalo_horas':intervalo_horas,
                         'condicao_climatica':condicao_climatica,
-                        'icon_img':request.POST.get("city_icon"),
+                        'icon_country_img':request.POST.get("city_icon"),
+                        'icon_event_img':icon_img,
                         'forecast_null':False,
                     }
-                    render(request,'html/event_query_climate.html',context=context)
+                    return render(request,'html/event_query_climate.html',context=context)
                     
 
 

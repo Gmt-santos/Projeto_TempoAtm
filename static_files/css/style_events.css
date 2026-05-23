@@ -12,7 +12,7 @@ textarea{
     flex-direction: column;
     align-items: flex-start;
     margin-top: 110px;
-    
+    margin-bottom: 20px;
     gap:10px;
 }
 .title_form_p{
@@ -21,7 +21,7 @@ textarea{
     border-bottom-width: 1px;
     border-color: var(--secondary-color-lightgreen);
     border-bottom-style: solid;
-    
+    text-align: center;
 
 }
 .text_input_p{
@@ -155,6 +155,23 @@ textarea{
     padding:10px;
     border-radius: 20px;   
     align-items:center;
+}
+.view_info_div{
+    width:100%;
+    display: flex;
+    gap:10px;
+}
+.view_info_iconevent_div{
+    
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+    padding:10px;
+}
+.view_info_title_p{
+    font-size:20px;
+    color:white;
 }
 /* Cores eventos/climas*/
 .red-e{

@@ -17,7 +17,7 @@ def intermediary_clima(request,_context:dict):
 def dashboard_clima(request):
      #Procura na pasta templates DIRETAMENTE
     #Fica subentendido o templates/...
-     
+     connection=None
      primeiro_dia,tamanho_calendario=utils.coletar_primeirodia_mes(request.session["ano_atual"],request.session["mes_atual"])
      
      try:
@@ -32,7 +32,7 @@ def dashboard_clima(request):
 
             user_obj=cursor.fetchall()
             cursor.execute("select events.nome,events.dia,events.color,types.icon from events join users on users.id=events.fk_id_user" \
-            " join types on events.fk_type=types.id where username =%s order by events.dia limit 5",[request.session["username"]])
+            " join types on events.fk_type=types.id where username =%s and events.dia>=%s order by events.dia limit 5",[request.session["username"],datetime.date.today()])
             event_obj=cursor.fetchall()
             #Verifica se o email da url é o da sessao,evita que o cara invada outros emails com o auth=true
             if(user_obj[0][2] == request.session['email']):
@@ -105,6 +105,7 @@ def update_month_minus(request):
 
 
 def perfil(request):
+    connection=None
     try:
         if(request.session["auth"] == True):
                 HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
@@ -119,7 +120,7 @@ def perfil(request):
                 
                 return render(request,"html/perfil.html",context)
     except psycopg2.OperationalError:
-       
+         messages.error(request,"Houve um erro ao consultar seu perfil,tente novamente mais tarde")
          return redirect("clima:dashboard_clima")
     except KeyError:
     

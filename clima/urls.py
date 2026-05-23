@@ -24,6 +24,7 @@ urlpatterns = [
     path('dashboard_clima/edit_event/update_event/',views.update_event,name="update_event"),
     path('dashboard_clima/edit_event/delete_event/',views.delete_event,name="delete_event"),
     path('dashboard_clima/view_event/<str:date>/',views.view_event,name="view_event"),
+    path('dashboard_clima/view_event/event_query_climate',views.event_query_climate,name="event_query_climate"),
 
 
     path('update/operation',views.update_operation,name="update_operation"),

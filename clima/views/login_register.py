@@ -113,24 +113,36 @@ def login_out(request):
 
 
 def register(request):
-    HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
-    connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
-    cursor=connection.cursor()
-    cursor.execute("select id,name,country,icon from cities")
-    country_obj=cursor.fetchall()
-    context={
-        "cities":country_obj
-    }
-    
-    return render(request,'html/register.html',context)
-
+    connection=None
+    try:
+         
+        HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
+        connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
+        cursor=connection.cursor()
+        cursor.execute("select id,name,country,icon from cities")
+        country_obj=cursor.fetchall()
+        context={
+            "cities":country_obj
+        }
+        
+        return render(request,'html/register.html',context)
+    except Exception:
+         ...
+    finally:
+         if connection is not None:
+              cursor.close()
+              connection.close()
+         
+         
+        
 
 
 def register_operation(request):
+    connection=None
     if request.method == "POST":
      
         ph=PasswordHasher()
-        HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
+        
         nome=request.POST.get("nome")
         email=request.POST.get("email")
         senha=request.POST.get("senha")
@@ -140,6 +152,7 @@ def register_operation(request):
         fav_city=request.POST.get("country")
         if(senha == confirmacao and senha):
             try:
+                HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
                 connection=psycopg2.connect(host=HOST,user=USER,password=PASSWORD,database=DATABASE,port=port_)
                 cursor=connection.cursor()
                 cursor.execute("select username,email from users where email = %s or username=%s",[email,username])
@@ -169,6 +182,7 @@ def register_operation(request):
 
 
 def update_operation(request):
+        connection=None
         try:
             if request.method == "POST":
                 HOST,USER,PASSWORD,DATABASE,port_=utils.load_var_env()
