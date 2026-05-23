@@ -7,10 +7,10 @@ db.sqlite3
 .cache.sqlite
 .cache/
 *.sqlite3
-media
+
 static
-app_clima/local_settings
-app_clima/local_settings.py
+app_clima/local_settings/pycache
+app_clima/local_settings/local_settings.py
 # Backup files # 
 *.bak 
 
@@ -147,4 +147,4 @@ GitHub.sublime-settings
 .history
 
 #coisa minha
-db_example.txt
+

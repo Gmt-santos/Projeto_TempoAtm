@@ -30,15 +30,15 @@
 
     </div> 
 {% else %}
-    <div style="display: block; height: fit-content;" >
+     <div style="display: block; height: fit-content;" >
         <div class="header">
             <div class="logo_nome_div">
              <img class="logo_min" src="{% static 'media/images/logo.png' %}" alt="">
              <a href="{% url 'clima:index' %}"class="logo_p lucida" >MatWeather</a>
             </div>
-              <div class="botoes_header_div">
-                <a href="{% url 'clima:dashboard_clima' %}"> <button class="botoes_header_buttons lucida">INÍCIO</button></a>
-                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons lucida">PERFIL</button></a>
+              <div class="botoes_header_div minor_gaps">
+                <a href="{% url 'clima:dashboard_clima' %}"> <button class="botoes_header_buttons minor_buttons lucida">INÍCIO</button></a>
+                <a href="{% url 'clima:perfil' %}"> <button class="botoes_header_buttons  minor_buttons lucida">PERFIL</button></a>
               
             </div>
             <div class="header_hello_div">
@@ -48,7 +48,7 @@
             </div>
 
             <div class="botoes_header_div">
-                <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons lucida">LOGOUT</button></a>
+                <a href="{% url 'clima:login_out'%}"> <button class="botoes_header_buttons  minor_buttons lucida">LOGOUT</button></a>
               
               
             </div>
@@ -56,7 +56,7 @@
         </div>
          
 
-    </div> 
+    </div>
 {% endif %}
 <body class="gradient">
     <div class="container">
@@ -127,7 +127,7 @@
                 </div>
                 <p class="event_title_dashboard_p">{{event.2}}</p>
                 <p class="event_title_dashboard_p">Data: {{event.3}}</p>
-                <input class= "botoes_header_buttons"type="submit" value="ACESSAR">
+                <input class= "botoes_access_button"type="submit" value="ACESSAR">
             </div>
             
         </form>

@@ -1,0 +1,75 @@
+
+CREATE TABLE cities (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    country VARCHAR(255),
+    latitude FLOAT,
+    longitude FLOAT,
+    icon VARCHAR(255)
+);
+
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    password VARCHAR(255),
+    icon VARCHAR(255),
+    fav_city INT,
+    email VARCHAR(255),
+    username VARCHAR(255)
+);
+
+
+CREATE TABLE types (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(255),
+    icon VARCHAR(255)
+);
+
+
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255),
+    descr TEXT,
+    dia DATE,
+    hora TIME,
+    color VARCHAR(255),
+    fk_type INT,
+    fk_id_user INT,
+    fk_city INT,
+    
+  
+    CONSTRAINT fk_event_type FOREIGN KEY (fk_type) REFERENCES types(id) ON DELETE SET NULL,
+    CONSTRAINT fk_event_user FOREIGN KEY (fk_id_user) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_event_city FOREIGN KEY (fk_city) REFERENCES cities(id) ON DELETE SET NULL
+);
+
+INSERT INTO cities (name, country, latitude, longitude, icon) VALUES
+('São Paulo', 'Brasil', -23.55, -46.64, 'brasil_icon.webp'),
+('Buenos Aires', 'Argentina', -34.6, -58.3, 'argentina_icon.webp'),
+('Porto Alegre', 'Brasil', -30.04, -51.21, 'brasil_icon.webp'),
+('Florianópolis', 'Brasil', -27.59, -48.54, 'brasil_icon.webp'),
+('Curitiba', 'Brasil', -25.42, -49.26, 'brasil_icon.webp'),
+('Rio de Janeiro', 'Brasil', -22.93, -43.29, 'brasil_icon.webp'),
+('Belo Horizonte', 'Brasil', -19.91, -43.96, 'brasil_icon.webp'),
+('Vitória', 'Brasil', -20.31, -40.33, 'brasil_icon.webp'),
+('Campo Grande', 'Brasil', -20.46, -54.64, 'brasil_icon.webp'),
+('Goiânia', 'Brasil', -16.69, -49.28, 'brasil_icon.webp'),
+('Cuiabá', 'Brasil', -15.59, -56.09, 'brasil_icon.webp'),
+('Brasília', 'Brasil', -15.79, -47.89, 'brasil_icon.webp'),
+('Palmas', 'Brasil', -10.25, -48.32, 'brasil_icon.webp'),
+('São Luís', 'Brasil', -2.52, -44.3, 'brasil_icon.webp'),
+('Teresina', 'Brasil', -5.09, -42.80, 'brasil_icon.webp'),
+('Fortaleza', 'Brasil', -3.72, -38.53, 'brasil_icon.webp'),
+('Natal', 'Brasil', -5.78, -35.21, 'brasil_icon.webp'),
+('João Pessoa', 'Brasil', -7.11, -34.88, 'brasil_icon.webp'),
+('Recife', 'Brasil', -8.05, -34.88, 'brasil_icon.webp'),
+('Maceió', 'Brasil', -9.66, -35.73, 'brasil_icon.webp'),
+('Aracaju', 'Brasil', -10.92, -37.07, 'brasil_icon.webp'),
+('Salvador', 'Brasil', -12.93, -38.44, 'brasil_icon.webp'),
+('Belém', 'Brasil', -1.44, -48.48, 'brasil_icon.webp'),
+('Macapá', 'Brasil', 0.04, -51.05, 'brasil_icon.webp'),
+('Boa Vista', 'Brasil', 2.82, -60.67, 'brasil_icon.webp'),
+('Manaus', 'Brasil', -3.11, -60.02, 'brasil_icon.webp'),
+('Rio Branco', 'Brasil', -9.97, -67.81, 'brasil_icon.webp'), 
+('Porto Velho', 'Brasil', -8.75, -63.9, 'brasil_icon.webp');
